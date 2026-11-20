@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Increff × Aqua Orange — Partner Enablement</title>
+<style>
+:root{--navy:#152C53;--coral:#EB5C5E;--muted:#5B6270;--line:#E5E7EB;--panel:#F6F8FB;--green:#1F8A5B;--yellow:#C98A00;--red:#C8393B;--blue:#2F6FD6;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0E1E3A;font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--navy);overflow:hidden}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{width:1600px;height:900px;position:relative;transform-origin:center center;flex:none}
+.slide{position:absolute;inset:0;background:#fff;padding:64px 80px 88px;display:none;flex-direction:column;border-radius:6px;overflow:hidden}
+.slide.active{display:flex;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.slide.dark{background:var(--navy);color:#fff}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px}
+.lg{display:inline-flex}.hdr .logo svg{height:34px;width:auto}
+.label{font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--coral);margin-bottom:10px}
+h1{font-size:64px;line-height:1.05;letter-spacing:-1px;font-weight:800}
+h2{font-size:42px;line-height:1.1;letter-spacing:-.5px;font-weight:800;max-width:1250px}
+h3{font-size:22px;font-weight:700;margin-bottom:8px}
+p,li{font-size:20px;line-height:1.45}
+.sub{font-size:22px;color:var(--muted);margin-top:12px;max-width:1200px}
+.dark .sub{color:#C9D3E6}
+.hint{font-size:15px;color:var(--muted);margin-top:auto;padding-top:14px}
+.hint b{color:var(--coral)}
+.foot{position:absolute;left:80px;right:80px;bottom:30px;display:flex;justify-content:space-between;font-size:14px;color:#9AA3B2}
+.dark .foot{color:#7F8DAA}
+.row{display:flex;gap:24px}
+.col{display:flex;flex-direction:column;gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+.chip{display:inline-block;padding:9px 16px;border-radius:999px;border:1.5px solid var(--line);background:#fff;font-size:17px;font-weight:600;cursor:pointer;color:var(--navy);transition:.15s;user-select:none}
+.chip:hover{border-color:var(--coral)}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn{cursor:pointer;user-select:none}
+.tag{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.5px;padding:4px 10px;border-radius:6px;text-transform:uppercase}
+.g{background:#E3F4EC;color:var(--green)}.y{background:#FFF3D6;color:#8A5E00}.r{background:#FBE3E3;color:var(--red)}.b{background:#E4EDFB;color:var(--blue)}.n{background:#EEF0F4;color:var(--muted)}
+/* nav */
+#nav{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;z-index:5;background:rgba(14,30,58,.85);padding:8px 14px;border-radius:999px}
+#nav button{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;padding:2px 8px}
+#dots{display:flex;gap:6px}
+#dots span{width:8px;height:8px;border-radius:50%;background:#46597C;cursor:pointer}
+#dots span.on{background:var(--coral)}
+#count{color:#C9D3E6;font-size:13px;min-width:46px;text-align:center}
+/* cover */
+.cover{background:linear-gradient(135deg,#152C53 0%,#1E3B6B 100%);color:#fff;justify-content:center}
+.cover .ring{position:absolute;right:-160px;top:-120px;width:720px;height:720px;border-radius:50%;border:40px solid rgba(235,92,94,.18)}
+.cover .ring2{position:absolute;right:120px;bottom:-260px;width:520px;height:520px;border-radius:50%;border:24px solid rgba(255,255,255,.06)}
+.logopill{background:#fff;border-radius:12px;padding:12px 18px;display:inline-flex;margin-bottom:56px;width:max-content}
+.logopill svg{height:40px;width:auto}
+/* module explorer */
+.lob{flex:1;border-radius:16px;padding:22px;border:1px solid var(--line)}
+.lob.plan{background:#F3F6FC}.lob.exec{background:#FDF3F3}
+.lob h3{font-size:24px}
+.lob .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+#modPanel{flex:1.15;background:var(--navy);color:#fff;border-radius:16px;padding:28px 30px}
+#modPanel h3{font-size:28px;margin-bottom:14px}
+#modPanel .k{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#F4A3A4;font-weight:700;margin-top:14px}
+#modPanel p{font-size:19px;color:#E6ECF7}
+/* journey */
+.journey{display:flex;gap:0;margin-top:10px}
+.stage{flex:1;padding:18px 14px;text-align:center;cursor:pointer;border:1.5px solid var(--line);margin-left:-1.5px;background:#fff;transition:.15s;position:relative}
+.stage:first-child{border-radius:12px 0 0 12px;margin-left:0}.stage:last-child{border-radius:0 12px 12px 0}
+.stage .num{font-size:13px;color:var(--muted);font-weight:700}
+.stage .nm{font-size:19px;font-weight:700;margin-top:4px}
+.stage .who{font-size:13px;margin-top:8px}
+.stage.on{background:var(--navy);color:#fff;border-color:var(--navy);z-index:2}
+.stage.on .num{color:#F4A3A4}
+.band{display:flex;margin-top:8px;font-size:14px;font-weight:700;text-align:center}
+.band div{padding:8px;border-radius:8px}
+#jPanel{margin-top:20px;display:grid;grid-template-columns:1fr 1.5fr 1.1fr;gap:16px}
+/* industries */
+.indgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:6px}
+.ind{border-radius:12px;padding:14px 14px;border:1.5px solid var(--line);cursor:pointer;background:#fff;min-height:76px;display:flex;flex-direction:column;justify-content:space-between}
+.ind .t{font-size:17px;font-weight:700}
+.ind.core{border-left:6px solid var(--green)}.ind.w2{border-left:6px solid var(--blue)}.ind.out{border-left:6px solid var(--red);background:#FCF7F7}
+.ind.on{outline:3px solid var(--coral)}
+#indPanel{margin-top:18px;min-height:96px}
+/* landscape */
+.land{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.sys{border-radius:14px;padding:18px;cursor:pointer;border:2px solid var(--line);background:#fff;transition:.15s}
+.sys .t{font-size:20px;font-weight:800}
+.sys .s{font-size:15px;color:var(--muted);margin-top:4px}
+.sys.yes{border-color:#9FD6BE}.sys.no{border-color:#F0B4B5;background:#FDF8F8}
+.sys.on{box-shadow:0 0 0 4px rgba(235,92,94,.35)}
+#sysPanel{margin-top:18px;background:var(--panel);border-radius:14px;padding:20px 24px;min-height:120px}
+/* router */
+.q{margin-bottom:16px}
+.q .qt{font-size:20px;font-weight:700;margin-bottom:10px}
+.q .opts{display:flex;gap:10px;flex-wrap:wrap}
+#routeOut{flex:1;border-radius:16px;padding:28px;background:var(--panel);border:2px dashed var(--line)}
+#routeOut.done{background:var(--navy);color:#fff;border:none}
+#routeOut h3{font-size:30px}
+/* table */
+table{border-collapse:collapse;width:100%}
+.tight td{font-size:15.5px;padding:7px 12px}.q12 td.qa{font-size:15.5px;padding:6px 12px}.tight th{padding:6px 12px}
+th{font-size:14px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:2px solid var(--line)}
+td{font-size:17px;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+/* stats */
+.big{font-size:64px;font-weight:800;letter-spacing:-1px;line-height:1}
+.stat{flex:1}
+.stat .lbl{font-size:16px;color:var(--muted);margin-top:8px}
+.dark .stat .lbl{color:#C9D3E6}
+.bar{display:flex;height:54px;border-radius:10px;overflow:hidden;margin-top:10px}
+.bar div{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;cursor:pointer}
+.acctlist{flex:1;overflow:auto;margin-top:14px;border:1px solid var(--line);border-radius:12px}
+.acctlist td{font-size:16px;padding:9px 12px}
+/* patterns */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pat{border-radius:14px;border:1.5px solid var(--line);padding:18px 20px;cursor:pointer;background:#fff;transition:.15s}
+.pat .n{font-size:14px;font-weight:800;color:var(--coral)}
+.pat .t{font-size:21px;font-weight:800;margin-top:4px}
+.pat .d{display:none;margin-top:10px;font-size:16px;line-height:1.45;color:#2B3B5A}
+.pat .d b{color:var(--navy)}
+.pat.open{background:#F3F6FC;border-color:var(--navy)}
+.pat.open .d{display:block}
+.worked .pat .n{color:var(--green)}
+/* case clinic */
+.casetabs{display:flex;gap:10px;margin-bottom:18px}
+.casebox{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;flex:1}
+.step{border-radius:16px;padding:24px;border:1.5px solid var(--line);background:#fff;position:relative}
+.step .k{font-size:14px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px}
+.step.s1 .k{color:var(--muted)}.step.s2 .k{color:var(--coral)}.step.s3 .k{color:var(--green)}
+.step .cover2{position:absolute;inset:0;border-radius:16px;background:var(--panel);display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;font-size:18px;color:var(--muted);border:1.5px dashed #C7CEDA}
+.step p,.step li{font-size:18px}
+.step ul{padding-left:20px}
+/* BANT */
+.bgrid{display:grid;grid-template-columns:180px repeat(3,1fr);gap:8px}
+.bgrid .h{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:1px;padding:6px 10px}
+.bgrid .crit{font-size:22px;font-weight:800;display:flex;align-items:center}
+.cell{border-radius:12px;padding:10px 14px;font-size:15px;line-height:1.35;cursor:pointer;border:2px solid transparent;opacity:.55;transition:.15s}
+.cell.G{background:#E3F4EC}.cell.Y{background:#FFF3D6}.cell.R{background:#FBE3E3}
+.cell.sel{opacity:1;border-color:var(--navy);box-shadow:0 4px 14px rgba(21,44,83,.15)}
+#bantOut{margin-top:12px;border-radius:14px;padding:14px 24px;display:flex;gap:24px;align-items:center}
+#bantOut .st{font-size:26px;font-weight:800}
+/* checklist */
+.cl{display:grid;grid-template-columns:1fr 1fr;gap:10px 22px}
+.ci{display:flex;gap:14px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);cursor:pointer;background:#fff}
+.ci .box{width:26px;height:26px;border-radius:7px;border:2px solid #B9C1CF;flex:none;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;margin-top:2px}
+.ci.on{background:#F1F8F4;border-color:#9FD6BE}.ci.on .box{background:var(--green);border-color:var(--green)}
+.ci .t{font-size:18px;font-weight:700}.ci .s{font-size:15px;color:var(--muted);margin-top:2px}
+.meter{height:16px;border-radius:999px;background:#EEF0F4;overflow:hidden;margin-top:8px}
+.meter div{height:100%;background:var(--coral);transition:.25s}
+/* playbook */
+.pb{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;flex:1}
+.pb .card h3{font-size:22px;margin-bottom:12px}
+.pb ul{padding-left:20px}.pb li{font-size:17px;margin-bottom:7px}
+.timeline{display:flex;gap:12px;margin-top:8px}
+.tl{flex:1;border-radius:14px;padding:18px;background:var(--panel);border-top:5px solid var(--coral);cursor:pointer}
+.tl .w{font-size:14px;font-weight:800;color:var(--coral);letter-spacing:1px;text-transform:uppercase}
+.tl .t{font-size:20px;font-weight:800;margin:6px 0 8px}
+.tl .d{font-size:16px;color:#2B3B5A;display:none;line-height:1.45}
+.tl.open{background:#fff;box-shadow:0 6px 20px rgba(21,44,83,.12)}
+.tl.open .d{display:block}
+.qa{font-size:17px}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="stage">
+
+<!-- 1 COVER -->
+<section class="slide cover" data-title="Cover">
+  <div class="ring"></div><div class="ring2"></div>
+  <div class="logopill"><span class="lg"></span></div>
+  <div class="label" style="color:#F4A3A4">Partner enablement · Aqua Orange</div>
+  <h1 style="max-width:1100px">Sourcing meetings that turn into opportunities</h1>
+  <p class="sub" style="font-size:26px;max-width:1000px">Know Increff end to end, qualify with the new BANT policy, and learn from 12 months of Aqua Orange meetings in Thailand.</p>
+  <p style="margin-top:56px;font-size:18px;color:#C9D3E6">Increff Strategic Alliances &amp; Partnerships · November 2026</p>
+  <div class="foot"><span>Use ← → keys or the controls below</span><span>Interactive deck: click anything with a border</span></div>
+</section>
+
+<!-- 2 WHY -->
+<section class="slide" data-title="Why this session">
+  <div class="hdr"><div><div class="label">Why we're here</div><h2>Two things we noticed, and one goal</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="row" style="flex:1">
+    <div class="card" style="flex:1">
+      <span class="tag r">Gap 1</span>
+      <h3 style="margin-top:14px;font-size:26px">Product understanding</h3>
+      <p>Some meetings were booked where the real problem sat outside Increff.</p>
+      <ul style="margin:14px 0 0 22px">
+        <li><b>GO Wholesale</b> — the pain was in their own ERP (MMS), not the WMS.</li>
+        <li><b>GO Wholesale &amp; Bata Thailand</b> — warehouses run by a 3PL. Bata wanted a 3PL with warehouse + manpower, which Increff doesn't provide.</li>
+      </ul>
+    </div>
+    <div class="card" style="flex:1">
+      <span class="tag y">Gap 2</span>
+      <h3 style="margin-top:14px;font-size:26px">New BANT policy</h3>
+      <p>A booked meeting no longer counts on its own. An opportunity needs the meeting <b>and</b> a clean Budget, Authority, Need and Timeline read.</p>
+      <p style="margin-top:12px">Any red = hold. One or more yellow = discuss with Increff before booking.</p>
+    </div>
+    <div class="card" style="flex:1;background:var(--navy);color:#fff;border:none">
+      <span class="tag" style="background:#EB5C5E;color:#fff">Goal</span>
+      <h3 style="margin-top:14px;font-size:26px">Fewer, better meetings</h3>
+      <p style="color:#E6ECF7">Use what worked and what didn't across 33 Thai accounts to build a sourcing playbook for Thailand and the next region.</p>
+      <p style="margin-top:18px;color:#F4A3A4;font-weight:700">Agenda</p>
+      <ol style="margin-left:22px;color:#E6ECF7"><li>Increff in one view</li><li>What we are / aren't</li><li>12-month meeting review</li><li>New BANT &amp; handoff</li><li>Stages: discovery → POC</li><li>Playbook for the next region</li></ol>
+    </div>
+  </div>
+  <div class="foot"><span>Increff × Aqua Orange</span><span class="pg"></span></div>
+</section>
+
+<!-- 3 MODULE EXPLORER -->
+<section class="slide" data-title="Increff in one view">
+  <div class="hdr"><div><div class="label">Part 1 · Increff in one view</div><h2>Two lines of business: plan the inventory, then run it</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="row" style="flex:1">
+    <div class="col" style="flex:1.3">
+      <div class="lob plan"><h3>Merchandising &amp; Planning (MS)</h3><p style="font-size:16px;color:var(--muted)">What to buy, how much, where to place it, when to mark down</p><div class="chips" data-lob="plan"></div></div>
+      <div class="lob exec"><h3>Fulfilment &amp; Omnichannel (Omni)</h3><p style="font-size:16px;color:var(--muted)">Receive, store, route, pick, pack, ship, return, across every channel</p><div class="chips" data-lob="exec"></div></div>
+    </div>
+    <div id="modPanel"><h3>Click a module</h3><p>Each module shows what it does, the pain it solves, who buys it, and one question that tells you it's relevant.</p></div>
+  </div>
+  <div class="hint"><b>Interactive:</b> click any module chip.</div>
+  <div class="foot"><span>Source: Increff partner handover guidelines; increff.com</span><span class="pg"></span></div>
+</section>
+
+<!-- 4 JOURNEY -->
+<section class="slide" data-title="Where Increff sits">
+  <div class="hdr"><div><div class="label">Part 1 · The inventory journey</div><h2>Follow one product from plan to customer, and see where Increff fits</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="journey" id="journey"></div>
+  <div class="band"><div style="flex:3;background:#E4EDFB;color:var(--blue);margin-right:6px">Merchandising (MS)</div><div style="flex:4;background:#FBE3E3;color:var(--red)">Omni: WMS · OMS · SFS</div></div>
+  <div id="jPanel"></div>
+  <div class="hint"><b>Interactive:</b> click each stage. Listen for the pain line on discovery calls.</div>
+  <div class="foot"><span>Increff × Aqua Orange</span><span class="pg"></span></div>
+</section>
+
+<!-- 5 INDUSTRIES -->
+<section class="slide" data-title="Industries">
+  <div class="hdr"><div><div class="label">Part 1 · Industries</div><h2>Where we play deepest, and where we don't play</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div style="display:flex;gap:18px;margin-bottom:12px;font-size:16px"><span><span class="tag g">Core</span> MS + Omni</span><span><span class="tag b">WMS 2.0</span> carton/pallet warehouses</span><span><span class="tag r">Out of ICP</span> don't book</span></div>
+  <div class="indgrid" id="indgrid"></div>
+  <div id="indPanel" class="card"><p>Click an industry to see which product fits and a Thai example from our meetings.</p></div>
+  <div class="foot"><span>Source: Increff partner handover guidelines</span><span class="pg"></span></div>
+</section>
+
+<!-- 6 WHAT WE ARE / AREN'T -->
+<section class="slide" data-title="What Increff is and isn't">
+  <div class="hdr"><div><div class="label">Part 2 · What we are / aren't</div><h2>Increff sells software. We plug into the ERP; we don't run warehouses.</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="land" id="land"></div>
+  <div id="sysPanel"><p style="color:var(--muted)">Click a box. Green = Increff sells it. Red = we don't, so a pain here alone is not an Increff meeting.</p></div>
+  <div class="hint"><b>Interactive:</b> click each system, especially <b>ERP</b> and <b>3PL</b>.</div>
+  <div class="foot"><span>Examples: GO Wholesale (24 Sep 2026), Bata Thailand (16 Nov 2026)</span><span class="pg"></span></div>
+</section>
+
+<!-- 7 3PL DEEP DIVE -->
+<section class="slide" data-title="When a 3PL runs the warehouse">
+  <div class="hdr"><div><div class="label">Part 2 · The 3PL question</div><h2>"Why can't Increff fulfil the orders?" Because we're not a 3PL in Thailand.</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="row" style="flex:1">
+    <div class="card" style="flex:1">
+      <h3>What a 3PL sells</h3>
+      <p>Warehouse space + manpower + transport + its own WMS, as one service.</p>
+      <h3 style="margin-top:22px">What Increff sells</h3>
+      <p>The software layer: WMS, OMS, SFS and merchandising, licensed to the company that runs the operation.</p>
+      <p style="margin-top:22px;padding:14px;background:#FBE3E3;border-radius:10px;font-size:18px"><b>Bata Thailand</b> was choosing between three 3PLs offering warehouse + manpower + WMS + OMS. Increff can't bid on that.</p>
+    </div>
+    <div class="card" style="flex:1.3">
+      <h3>So when the brand outsources to a 3PL, ask:</h3>
+      <table style="margin-top:8px">
+        <tr><th>If you hear…</th><th>It means</th><th>Do this</th></tr>
+        <tr><td>"Our 3PL runs the warehouse, their WMS is fine"</td><td>The brand isn't the WMS buyer</td><td><span class="tag r">Don't book WMS</span></td></tr>
+        <tr><td>"We can't see 3PL stock with store &amp; online stock"</td><td>Multi-channel inventory pain</td><td><span class="tag g">OMS meeting</span></td></tr>
+        <tr><td>"Allocation to stores is in Excel"</td><td>Planning pain (GO Wholesale had this)</td><td><span class="tag g">MS meeting</span></td></tr>
+        <tr><td>"We'll take the warehouse back in-house"</td><td>Future WMS, with a trigger date</td><td><span class="tag y">Nurture to the date</span></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="foot"><span>GO Wholesale: 14 stores, own warehouse only at 20–25 stores (~2 yrs). Bata: decision end-Nov 2026, through Bata Global.</span><span class="pg"></span></div>
+</section>
+
+<!-- 8 ROUTER -->
+<section class="slide" data-title="Route the lead">
+  <div class="hdr"><div><div class="label">Part 2 · Route first, then qualify</div><h2>Four questions tell you which product a lead belongs to</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="row" style="flex:1">
+    <div style="flex:1.25" id="router"></div>
+    <div id="routeOut"><h3>Answer the questions</h3><p style="color:var(--muted);margin-top:10px">Try it with a real account you're working on. The panel shows which product to book, the scale bar it must clear, and who should be on the call.</p></div>
+  </div>
+  <div class="foot"><span>Source: Increff qualification guidelines</span><span class="pg"></span></div>
+</section>
+
+<!-- 9 ICP -->
+<section class="slide" data-title="ICP bar">
+  <div class="hdr"><div><div class="label">Part 2 · ICP</div><h2>The bar a company must clear before BANT even starts</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="row" style="flex:1">
+    <div style="flex:1.4">
+      <table>
+        <tr><th>Product</th><th>Scale bar (international)</th><th>Typical buyer</th></tr>
+        <tr><td><b>Merchandising (MS)</b></td><td>Revenue ~$10M+, multi-store (<b>minimum 20 stores</b>) / multi-channel, real assortment complexity</td><td>CEO / Founder, Chief Merchandising Officer, Head of Merchandising, Head of Planning, Head of Buying, CFO, Head of E-commerce</td></tr>
+        <tr><td><b>WMS 1.0</b> (piece-level)</td><td>Revenue ~$5M+; ≥30,000 pieces/month</td><td>CEO / Founder, COO / Head of Operations, Head of Supply Chain, Head of Warehouse, Head of Logistics, CIO / CTO</td></tr>
+        <tr><td><b>WMS 2.0</b> (carton/pallet)</td><td>Revenue ~$5M+; carton/pallet volumes (bar being finalised)</td><td>COO / Head of Operations, Head of Supply Chain, Head of Warehouse, Head of Logistics, Head of Distribution, CIO / CTO</td></tr>
+        <tr><td><b>OMS / SFS</b></td><td>10+ stores selling online and offline</td><td>Head of E-commerce / Omnichannel, Head of Digital / CDO, CIO / CTO, COO, CEO / Founder</td></tr>
+      </table>
+      <p style="margin-top:16px;font-size:17px;color:var(--muted)">Exceptions exist where urgency or complexity is high. Flag them to Increff before booking.</p>
+    </div>
+    <div class="col" style="flex:1">
+      <div class="card"><h3 style="color:var(--green)">Book with</h3><p style="font-size:18px">Head level and above: Founder / CXO · Heads of Supply Chain, Operations, Warehouse, Logistics, E-commerce, Merchandising, Planning, Buying · IT / Digital leaders</p></div>
+      <div class="card"><h3 style="color:var(--red)">Not the primary contact</h3><p style="font-size:18px">Managers, junior coordinators and analysts · stand-ins for the real owner · engineers only · procurement with no business owner · consultants without the client on the call</p></div>
+      <div class="card" style="background:#FFF8E6;border-color:#F3D98A"><p style="font-size:17px"><b>Thai examples:</b> Ari Football's first call was an ERP stand-in; M-SENKO sent only engineers; Pranda's decision-maker dropped off.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>Source: Increff partner handover guidelines</span><span class="pg"></span></div>
+</section>
+
+<!-- 10 SECTION: REVIEW NUMBERS -->
+<section class="slide dark" data-title="12 months in numbers">
+  <div class="hdr"><div><div class="label">Part 3 · 12-month review</div><h2>Nov 2025 – Nov 2026: Aqua Orange meetings in Thailand</h2></div></div>
+  <div class="row" style="margin-top:10px">
+    <div class="stat"><div class="big">33</div><div class="lbl">Thai accounts met</div></div>
+    <div class="stat"><div class="big">46</div><div class="lbl">recorded client meetings</div></div>
+    <div class="stat"><div class="big" style="color:#F4A3A4">9</div><div class="lbl">still progressing (3 at proposal)</div></div>
+    <div class="stat"><div class="big" style="color:#F4A3A4">0</div><div class="lbl">closed-won so far</div></div>
+    <div class="stat"><div class="big">6</div><div class="lbl">meetings lost to no-show / failed call / cut short</div></div>
+  </div>
+  <p style="margin-top:46px;font-size:18px;color:#C9D3E6">Where the 33 accounts are today (click a segment to see the accounts on the next slide)</p>
+  <div class="bar" id="outBar"></div>
+  <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:16px;color:#C9D3E6" id="outLegend"></div>
+  <p style="margin-top:auto;font-size:15px;color:#7F8DAA">Source: recorded meetings and Increff deal stages; Increff × AO pipeline reviews (2 Sep, 16 Sep, 7 Oct 2026). India/US meetings (XYXX, La Pink, LetsShave, ITC, Caspari and others) are excluded here.</p>
+  <div class="foot"><span>Increff × Aqua Orange</span><span class="pg"></span></div>
+</section>
+
+<!-- 11 ACCOUNT EXPLORER -->
+<section class="slide" data-title="Account explorer">
+  <div class="hdr"><div><div class="label">Part 3 · Account explorer</div><h2>Every Thai account, its outcome and the reason</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div style="display:flex;gap:10px" id="acctFilters"></div>
+  <div class="acctlist"><table id="acctTable"></table></div>
+  <div class="foot"><span>Stage as of 20 Nov 2026</span><span class="pg"></span></div>
+</section>
+
+<!-- 12 WHAT WORKED -->
+<section class="slide worked" data-title="What worked">
+  <div class="hdr"><div><div class="label" style="color:var(--green)">Part 3 · What worked</div><h2>The meetings that moved forward had five things in common</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="pgrid" id="worked"></div>
+  <div class="hint"><b>Interactive:</b> click a card to see the accounts behind it.</div>
+  <div class="foot"><span>Source: recorded meetings</span><span class="pg"></span></div>
+</section>
+
+<!-- 13 WHAT DIDN'T -->
+<section class="slide" data-title="What didn't work">
+  <div class="hdr"><div><div class="label">Part 3 · What didn't work</div><h2>Six patterns cost us most of the 24 meetings that stalled</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="pgrid" id="didnt"></div>
+  <div class="hint"><b>Interactive:</b> click a card for the accounts and the fix.</div>
+  <div class="foot"><span>Source: recorded meetings; Increff × AO pipeline reviews</span><span class="pg"></span></div>
+</section>
+
+<!-- 14 CASE CLINIC -->
+<section class="slide" data-title="Case clinic">
+  <div class="hdr"><div><div class="label">Part 3 · Case clinic</div><h2>Pick a case, discuss it as a team, then reveal each layer</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="casetabs" id="caseTabs"></div>
+  <div class="casebox" id="caseBox"></div>
+  <div class="hint"><b>How to run it:</b> read "What we heard", ask the room what was really going on, then reveal. No right or wrong answers.</div>
+  <div class="foot"><span>Source: recorded meetings</span><span class="pg"></span></div>
+</section>
+
+<!-- 15 BANT -->
+<section class="slide" data-title="New BANT policy">
+  <div class="hdr"><div><div class="label">Part 4 · New BANT policy</div><h2>Grade each letter, and the handoff decision follows</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="bgrid" id="bgrid"></div>
+  <div id="bantOut"></div>
+  <div class="foot"><span>Source: Increff partner handover guidelines (colour grading matrix)</span><span class="pg"></span></div>
+</section>
+
+<!-- 16 HANDOFF -->
+<section class="slide" data-title="Handoff checklist">
+  <div class="hdr"><div><div class="label">Part 4 · Before you hand off</div><h2>The handoff form: what we need before a meeting is booked</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="row" style="align-items:center;margin-bottom:14px">
+    <div style="flex:1"><div class="meter"><div id="meterFill" style="width:0%"></div></div></div>
+    <div id="meterTxt" style="font-size:18px;font-weight:700;min-width:360px;text-align:right"></div>
+  </div>
+  <div class="cl" id="cl"></div>
+  <div class="hint"><b>Interactive:</b> tick what you know about a lead you're working on. All seven mandatory items are needed to hand off.</div>
+  <div class="foot"><span>Source: Increff partner handover guidelines (handoff questions)</span><span class="pg"></span></div>
+</section>
+
+<!-- 17 PRE-MEETING -->
+<section class="slide" data-title="Questions that would have saved us">
+  <div class="hdr"><div><div class="label">Part 4 · Pre-qualifying in practice</div><h2>Questions that would have caught each stalled meeting early</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <table class="tight q12">
+    <tr><th style="width:26%">Ask before booking</th><th style="width:30%">A worrying answer</th><th>Would have caught</th></tr>
+    <tr><td class="qa"><b>"Who runs your warehouse today: your team or a 3PL?"</b></td><td class="qa">"A 3PL, and we're happy with it"</td><td class="qa">GO Wholesale, Bata Thailand</td></tr>
+    <tr><td class="qa"><b>"Is the problem in your ERP or in warehouse / store operations?"</b></td><td class="qa">"Our ERP can't record lots / we're migrating ERP"</td><td class="qa">GO Wholesale, Ari Football, Bangkok Sport Swear</td></tr>
+    <tr><td class="qa"><b>"When did you last change your WMS / OMS?"</b></td><td class="qa">"We went live last quarter"</td><td class="qa">Amway Thailand, Gold City (Nov-25), Supara (kept OMS)</td></tr>
+    <tr><td class="qa"><b>"How many pieces / orders a month, and how many stores?"</b></td><td class="qa">"About 50 SKUs" / "50k pieces a year"</td><td class="qa">SSUP, April Pool Day, Pasaya</td></tr>
+    <tr><td class="qa"><b>"Who signs off, and can they join the first call?"</b></td><td class="qa">"I'm standing in for my colleague"</td><td class="qa">Ari Football, M-SENKO, Boon Rawd, Pranda</td></tr>
+    <tr><td class="qa"><b>"Is there a date driving this?"</b></td><td class="qa">"Maybe in 1–2 years"</td><td class="qa">Jaspal, Asian Alliance, Bangkok Sport Swear</td></tr>
+    <tr><td class="qa"><b>"Is budget set aside? What do you spend on systems today?"</b></td><td class="qa">"Not yet" / a very small current spend</td><td class="qa">Pasaya, Ari Football, Boon Rawd</td></tr>
+    <tr><td class="qa"><b>"Are you buying software, or an outsourced warehouse service? Who else has bid?"</b></td><td class="qa">"Three 3PLs have sent proposals"</td><td class="qa">Bata Thailand, Supara (multi-vendor)</td></tr>
+    <tr><td class="qa"><b>"Is the issue online orders, or stock inside the stores?"</b></td><td class="qa">"Online is fine, store stock is the mess"</td><td class="qa">Amway Thailand (booked for the wrong product)</td></tr>
+    <tr><td class="qa"><b>"Is the planning for selling inventory, or for the factory?"</b></td><td class="qa">"Production and packaging material planning"</td><td class="qa">Asian Alliance</td></tr>
+    <tr><td class="qa"><b>"Will you share data under NDA so we can show results on your numbers?"</b></td><td class="qa">"We want to test first, no data"</td><td class="qa">HomePro</td></tr>
+    <tr><td class="qa"><b>"Can [decision-maker] confirm they'll join? May I reconfirm the day before?"</b></td><td class="qa">"They'll try to make it"</td><td class="qa">Make My Day, AIIZ, Rev Edition, Pranda</td></tr>
+  </table>
+  <div class="foot"><span>Source: recorded meetings, Nov 2025 – Nov 2026</span><span class="pg"></span></div>
+</section>
+
+<!-- STAGES -->
+<section class="slide" data-title="Stages of a conversation">
+  <div class="hdr"><div><div class="label">Part 5 · After the handoff</div><h2>Five stages of a conversation, and what must be true to move to the next</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="journey" id="stg"></div>
+  <div id="stgPanel" style="margin-top:20px;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:16px;flex:1"></div>
+  <div class="hint"><b>Interactive:</b> click each stage. Use these names with prospects and in our pipeline reviews.</div>
+  <div class="foot"><span>Source: Increff sales process definitions</span><span class="pg"></span></div>
+</section>
+
+<!-- WORKSHOP VS POC -->
+<section class="slide" data-title="Workshop vs POC">
+  <div class="hdr"><div><div class="label">Part 5 · Naming it right</div><h2>A workshop is not a POC. Most of what we've called "POC" in Thailand was a workshop.</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <table class="tight">
+    <tr><th style="width:18%"></th><th style="width:27%">Workshop</th><th style="width:27%">Paid POC (Increff standard)</th><th>Free POC</th></tr>
+    <tr><td><b>What it is</b></td><td>Onsite or deep-dive session: walk their flows, solution their warehouse or planning process, show the product on sample / dummy data</td><td>Time-boxed proof on the prospect's <b>own data</b> against written success criteria</td><td>Same as a POC but unpaid</td></tr>
+    <tr><td><b>Paperwork</b></td><td>None (NDA only if their data is shown)</td><td><b>Signed LOI</b> (intent to buy if criteria are met) + data NDA + POC charter</td><td>LOI + NDA, and Business Head / CRO approval</td></tr>
+    <tr><td><b>Who must attend</b></td><td>Function head + users</td><td>Named Economic Buyer sponsors kickoff and readout</td><td>Same</td></tr>
+    <tr><td><b>Success criteria</b></td><td>Prospect confirms fit</td><td>3–5 measurable criteria in writing (e.g. forecast accuracy, sell-through vs control stores)</td><td>Same</td></tr>
+    <tr><td><b>Duration</b></td><td>A day or two</td><td>≤ 90 days incl. data onboarding; clock starts when data arrives</td><td>Same</td></tr>
+    <tr><td><b>Commercials</b></td><td>Free</td><td>Paid pilot; scope (e.g. one brand, one cluster) and fee set by Increff</td><td><span class="tag r">Not offered by default</span> — free POCs turn into free consulting</td></tr>
+    <tr><td><b>Applies to</b></td><td>MS and Omni</td><td>MS by default; Omni only by exception (prefer a warehouse visit / reference)</td><td>Exception only</td></tr>
+  </table>
+  <div class="row" style="margin-top:16px">
+    <div class="card" style="flex:1;padding:16px 20px"><p style="font-size:17px"><b>HomePro</b> asked to "test the system" with sample data before sharing theirs → that's a <b>workshop / sandbox</b>, not a POC.</p></div>
+    <div class="card" style="flex:1;padding:16px 20px"><p style="font-size:17px"><b>ICC</b>: AO proposed "stage 1 POC on dummy data". Increff's view: that's a demo already done. POC starts only with ICC's data, NDA and the right stakeholders.</p></div>
+    <div class="card" style="flex:1;padding:16px 20px"><p style="font-size:17px"><b>ICC &amp; Moshi Moshi</b> are being positioned for <b>paid</b> POCs. That's the model to follow.</p></div>
+  </div>
+  <div class="foot"><span>Source: Increff POC policy; ICC alignment call 26 Oct 2026; Increff × AO pipeline reviews</span><span class="pg"></span></div>
+</section>
+
+<!-- 18 PLAYBOOK -->
+<section class="slide" data-title="Playbook for the next region">
+  <div class="hdr"><div><div class="label">Part 6 · Playbook</div><h2>How we source in Thailand from here, and in any new region</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="pb">
+    <div class="card"><h3 style="color:var(--green)">Target</h3><ul>
+      <li>Multi-brand / multi-store fashion &amp; lifestyle retailers (100+ stores) planning in Excel → <b>MS</b></li>
+      <li>Beverage, food and FMCG distributors running their own warehouses → <b>WMS 2.0</b></li>
+      <li>Fashion brands with own warehouse, B2C + marketplaces, ≥30k pieces/month → <b>WMS 1.0 + OMS</b></li>
+      <li>Companies with a trigger: new warehouse, contract ending, current system too costly or not scaling</li>
+    </ul></div>
+    <div class="card"><h3 style="color:var(--red)">Avoid</h3><ul>
+      <li>Warehouse fully outsourced to a 3PL with no OMS or planning pain</li>
+      <li>ERP projects in flight, or "our ERP can't do X"</li>
+      <li>Systems that went live in the last 12 months</li>
+      <li>Single-store or very small assortments</li>
+      <li>Manufacturing / production-planning asks</li>
+    </ul></div>
+    <div class="card" style="background:var(--navy);color:#fff;border:none"><h3 style="color:#F4A3A4">How we run it</h3><ul style="color:#E6ECF7">
+      <li>2-minute website + LinkedIn pre-check before outreach</li>
+      <li>Route the product before booking; name the meeting after the real pain</li>
+      <li>Send the handoff form with the invite; no form, no booking</li>
+      <li>Confirm the decision-maker 24 hours before; reschedule rather than run without them</li>
+      <li>AO joins as an extended team member who probes, not only a translator</li>
+      <li>Probe for BANT: use the call to get the answers missing at booking (budget, decision-maker, need, timeline). Don't pitch features; leave the product to the Increff team</li>
+    </ul></div>
+  </div>
+  <div class="foot"><span>Increff × Aqua Orange</span><span class="pg"></span></div>
+</section>
+
+<!-- 19 NEW REGION -->
+<section class="slide" data-title="Launching a new region">
+  <div class="hdr"><div><div class="label">Part 6 · New region launch</div><h2>A 90-day plan to open the next market without repeating Thailand</h2></div><div class="logo"><span class="lg"></span></div></div>
+  <div class="timeline" id="tl"></div>
+  <div class="card" style="margin-top:22px"><p style="font-size:18px"><b>What we measure together:</b> meetings held with an ICP buyer · % of handoffs with all mandatory fields · % of meetings meeting the all-green BANT bar · no-show rate · meetings that reach a second call. We stop counting meetings booked as the goal.</p></div>
+  <div class="hint"><b>Interactive:</b> click each phase.</div>
+  <div class="foot"><span>Increff × Aqua Orange</span><span class="pg"></span></div>
+</section>
+
+<!-- 20 CLOSE -->
+<section class="slide cover" data-title="Next steps">
+  <div class="ring"></div>
+  <div class="logopill"><span class="lg"></span></div>
+  <div class="label" style="color:#F4A3A4">Next steps</div>
+  <h1 style="max-width:1100px;font-size:56px">What we agree today</h1>
+  <ol style="margin:30px 0 0 28px;color:#E6ECF7;max-width:1100px">
+    <li style="font-size:24px;margin-bottom:10px">Every new meeting comes with the handoff form filled and BANT graded</li>
+    <li style="font-size:24px;margin-bottom:10px">Re-check the 9 progressing Thai accounts against BANT; agree the gap to close on each</li>
+    <li style="font-size:24px;margin-bottom:10px">Pick the next region and its first target list with the "Target / Avoid" filters</li>
+    <li style="font-size:24px">Monthly review of the five shared metrics</li>
+  </ol>
+  <div class="foot"><span>Questions? Reach out to the Increff partnerships team</span><span class="pg"></span></div>
+</section>
+
+</div></div>
+<template id="logoTpl"><svg width="251" height="75" viewBox="0 0 251 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1550_1261)">
+<path d="M92.6649 11.8242C93.3439 11.8242 93.9129 12.3978 93.9129 13.0722V36.7844C93.9129 37.4635 93.3394 38.0325 92.6649 38.0325H89.9853C89.3063 38.0325 88.7373 37.4589 88.7373 36.7844V13.0722C88.7373 12.3932 89.3108 11.8242 89.9853 11.8242H92.6649ZM121.415 11.8242C122.094 11.8242 122.663 12.3978 122.663 13.0722V36.7844C122.663 37.4635 122.094 38.0325 121.415 38.0325H118.272C117.877 38.0325 117.524 37.8535 117.272 37.5323L104.879 20.5695V36.7844C104.879 37.4635 104.305 38.0325 103.631 38.0325H100.951C100.272 38.0325 99.7033 37.4589 99.7033 36.7844V13.0722C99.7033 12.3932 100.277 11.8242 100.951 11.8242H104.058C104.452 11.8242 104.842 12.0032 105.058 12.3243L117.487 29.2184V13.0722C117.487 12.3932 118.024 11.8242 118.703 11.8242H121.42H121.415ZM136.579 17.454C135.671 17.8395 134.868 18.3992 134.235 19.1333C132.904 20.6016 132.275 22.5241 132.275 24.9375C132.275 27.3509 132.904 29.2734 134.235 30.7784C135.597 32.3155 137.557 33.0496 140.25 33.0496C141.686 33.0496 142.874 32.7009 143.921 31.9989C145.003 31.2647 145.774 30.3563 146.297 29.1312C146.472 28.677 146.926 28.3971 147.417 28.3971H150.179C150.564 28.3971 150.95 28.5714 151.156 28.888C151.399 29.2367 151.473 29.6221 151.331 30.0076C150.454 32.4577 149.023 34.3802 147.063 35.7796C144.967 37.2846 142.48 38.0554 139.649 38.0554C135.905 38.0554 132.826 36.7615 130.486 34.1737C128.316 31.7236 127.196 28.6127 127.196 24.9375C127.196 21.2623 128.316 18.1515 130.486 15.7059C132.831 13.1181 135.909 11.8242 139.649 11.8242C142.48 11.8242 144.967 12.595 147.063 14.0954C149.023 15.4948 150.454 17.454 151.331 19.8675C151.468 20.2529 151.399 20.6704 151.156 20.987C150.945 21.3036 150.56 21.478 150.179 21.478H147.417C146.926 21.478 146.472 21.1981 146.297 20.7438C145.774 19.5188 145.003 18.6103 143.921 17.8762C142.87 17.1787 141.681 16.8254 140.25 16.8254C138.745 16.8254 137.52 17.0365 136.579 17.454ZM172.519 27.9291L177.842 36.1054C178.089 36.5 178.089 37.0001 177.878 37.3901C177.663 37.7847 177.236 38.0325 176.805 38.0325H173.588C173.162 38.0325 172.767 37.8168 172.551 37.4589L167.192 28.9247H160.87V36.7799C160.87 37.4589 160.296 38.0279 159.622 38.0279H156.942C156.263 38.0279 155.694 37.4543 155.694 36.7799V13.0722C155.694 12.3932 156.268 11.8242 156.942 11.8242H168.298C171.014 11.8242 173.263 12.6088 174.942 14.1459C176.658 15.7151 177.511 17.8257 177.511 20.5052C177.511 23.9327 175.974 26.4333 173.084 27.6859C172.905 27.7914 172.689 27.8648 172.51 27.9337L172.519 27.9291ZM160.879 16.8621V23.896H167.844C169.913 23.896 171.271 23.327 172.024 22.1478C172.239 21.7533 172.382 21.1843 172.382 20.5052C172.382 19.3261 172.024 18.5048 171.276 17.8624C170.455 17.1833 169.381 16.8621 167.991 16.8621H160.883H160.879ZM201.054 32.8936C201.77 32.8936 202.302 33.4671 202.302 34.1783V36.7844C202.302 37.4635 201.765 38.0325 201.054 38.0325H183.412C182.733 38.0325 182.164 37.4635 182.164 36.7844V34.1783C182.164 33.4625 182.737 32.8936 183.412 32.8936H201.054ZM183.412 27.6446C182.733 27.6446 182.164 27.0711 182.164 26.3966V23.717C182.164 23.038 182.737 22.469 183.412 22.469H199.448C200.164 22.469 200.733 23.0426 200.733 23.717V26.3966C200.733 27.0757 200.159 27.6446 199.448 27.6446H183.412ZM201.054 11.8242C201.77 11.8242 202.302 12.3978 202.302 13.0722V15.6784C202.302 16.3941 201.765 16.9631 201.054 16.9631H183.412C182.733 16.9631 182.164 16.3896 182.164 15.6784V13.0722C182.164 12.3932 182.737 11.8242 183.412 11.8242H201.054ZM223.591 22.469C224.307 22.469 224.876 23.038 224.876 23.7537V26.3966C224.876 27.0757 224.303 27.6446 223.591 27.6446H211.841V36.789C211.841 37.4681 211.304 38.037 210.593 38.037H207.877C207.197 38.037 206.629 37.4635 206.629 36.789V23.7537C206.629 23.038 207.202 22.469 207.877 22.469H223.591ZM225.197 11.8242C225.876 11.8242 226.445 12.3978 226.445 13.0722V15.6784C226.445 16.3941 225.872 16.9631 225.197 16.9631H207.877C207.197 16.9631 206.629 16.3896 206.629 15.6784V13.0722C206.629 12.3932 207.202 11.8242 207.877 11.8242H225.197ZM247.161 22.469C247.877 22.469 248.446 23.038 248.446 23.7537V26.3966C248.446 27.0757 247.873 27.6446 247.161 27.6446H235.411V36.789C235.411 37.4681 234.874 38.037 234.163 38.037H231.447C230.767 38.037 230.199 37.4635 230.199 36.789V23.7537C230.199 23.038 230.772 22.469 231.447 22.469H247.161ZM248.767 11.8242C249.446 11.8242 250.015 12.3978 250.015 13.0722V15.6784C250.015 16.3941 249.442 16.9631 248.767 16.9631H231.447C230.767 16.9631 230.199 16.3896 230.199 15.6784V13.0722C230.199 12.3932 230.772 11.8242 231.447 11.8242H248.767Z" fill="#152C53"/>
+<path d="M88.7375 49.0713H92.1742V50.3009H91.151V58.6149H92.1742V59.8354H88.7375V58.6149H89.7607V50.3009H88.7375V49.0713ZM98.74 58.6103H99.777V55.2517C99.777 54.6873 99.6347 54.2606 99.3457 53.9716C99.0612 53.6825 98.6482 53.5357 98.116 53.5357C97.8086 53.5357 97.4966 53.6091 97.1846 53.7559C96.8726 53.9027 96.5743 54.0863 96.299 54.3019V58.6103H97.336V59.8308H93.8994V58.6103H94.9226V53.6963H93.8994V52.4758H96.244V53.343H96.2577C96.4137 53.2053 96.5789 53.0769 96.7579 52.953C96.9368 52.8291 97.1203 52.7236 97.313 52.6318C97.5057 52.54 97.7076 52.4712 97.9187 52.4207C98.1298 52.3703 98.35 52.3427 98.584 52.3427C98.9786 52.3427 99.3319 52.3978 99.6485 52.5079C99.9651 52.618 100.236 52.7832 100.456 53.0034C100.676 53.2283 100.851 53.5127 100.97 53.8569C101.089 54.2056 101.153 54.6139 101.153 55.0865V58.6057H102.177V59.8262H98.74V58.6057V58.6103ZM108.903 54.435C108.706 54.0817 108.453 53.8202 108.146 53.655C107.839 53.4898 107.485 53.4072 107.086 53.4072C106.779 53.4072 106.49 53.4714 106.219 53.5999C105.948 53.7284 105.714 53.9119 105.512 54.1459C105.31 54.3845 105.154 54.669 105.035 55.0085C104.92 55.3481 104.861 55.7243 104.861 56.1418C104.861 56.5548 104.92 56.9264 105.035 57.2568C105.15 57.5871 105.31 57.8716 105.512 58.1056C105.714 58.3396 105.953 58.5186 106.219 58.647C106.485 58.7709 106.774 58.8351 107.081 58.8351C107.536 58.8351 107.93 58.725 108.265 58.5048C108.6 58.2846 108.866 57.9634 109.068 57.5367L110.16 58.0781C110.018 58.3809 109.844 58.6516 109.633 58.8948C109.426 59.138 109.188 59.3399 108.926 59.5142C108.664 59.684 108.375 59.817 108.059 59.9088C107.742 60.0006 107.412 60.0464 107.063 60.0464C106.554 60.0464 106.081 59.9501 105.645 59.7574C105.214 59.5647 104.838 59.2986 104.526 58.9498C104.209 58.6057 103.966 58.1928 103.792 57.7156C103.617 57.2384 103.53 56.7154 103.53 56.1464C103.53 55.5775 103.622 55.0544 103.805 54.5772C103.989 54.1 104.241 53.6871 104.567 53.3476C104.888 53.0034 105.265 52.7373 105.696 52.54C106.127 52.3473 106.586 52.251 107.081 52.251C107.545 52.251 107.985 52.3336 108.398 52.4941C108.811 52.6547 109.174 52.8979 109.486 53.2237H110.229V54.4442H108.894L108.903 54.435ZM116.818 54.0312H115.469V53.577C115.313 53.577 115.152 53.6045 114.992 53.6642C114.826 53.7238 114.675 53.811 114.533 53.9349C114.391 54.0542 114.267 54.2102 114.161 54.3983C114.056 54.5864 113.978 54.8066 113.932 55.0636V58.6149H115.18V59.8354H111.532V58.6149H112.546L112.555 53.7009H111.532V52.4804H113.881V53.4944C113.968 53.343 114.06 53.2007 114.17 53.0723C114.276 52.9438 114.395 52.8291 114.524 52.7327C114.652 52.6364 114.799 52.5584 114.955 52.5079C115.116 52.4529 115.285 52.4253 115.469 52.4253H116.166L116.818 52.4391V54.0358V54.0312ZM119.594 56.3254C119.594 56.5318 119.607 56.7245 119.64 56.8989C119.672 57.0732 119.713 57.2338 119.773 57.3944C119.947 57.867 120.227 58.2249 120.612 58.4635C120.998 58.7021 121.434 58.8214 121.925 58.8214C122.31 58.8214 122.682 58.7663 123.044 58.6608C123.407 58.5553 123.787 58.3855 124.182 58.1607L124.714 59.06C124.232 59.3903 123.746 59.6381 123.26 59.7987C122.773 59.9593 122.264 60.0419 121.741 60.0419C121.245 60.0419 120.782 59.9593 120.36 59.7941C119.938 59.6289 119.571 59.3812 119.268 59.0554C118.961 58.7296 118.722 58.3213 118.552 57.8349C118.378 57.3485 118.295 56.7796 118.295 56.1326C118.295 55.6096 118.369 55.1095 118.515 54.646C118.662 54.178 118.883 53.7743 119.172 53.4256C119.461 53.0769 119.823 52.8016 120.254 52.5997C120.686 52.3978 121.186 52.2923 121.759 52.2923C122.333 52.2923 122.773 52.3748 123.145 52.5446C123.517 52.7144 123.82 52.9346 124.054 53.2099C124.288 53.4852 124.466 53.8018 124.586 54.1597C124.705 54.513 124.792 54.8755 124.838 55.2471C124.861 55.4261 124.879 55.6096 124.884 55.7931C124.893 55.9766 124.893 56.1556 124.893 56.3345H119.598L119.594 56.3254ZM121.658 53.3934C121.351 53.3934 121.08 53.4393 120.851 53.5265C120.621 53.6137 120.424 53.7376 120.264 53.9027C120.103 54.0679 119.975 54.2652 119.878 54.5038C119.782 54.7424 119.708 55.0039 119.663 55.2976H123.475C123.457 55.0223 123.411 54.7699 123.342 54.5359C123.274 54.3065 123.168 54.1046 123.026 53.9349C122.884 53.7651 122.7 53.632 122.48 53.5357C122.26 53.4393 121.984 53.3934 121.658 53.3934ZM131.023 48.7868H133.345V58.6103H134.423V59.8308H132.023V59.2251C131.785 59.4683 131.514 59.6564 131.202 59.7895C130.89 59.9226 130.537 59.9914 130.138 59.9914C129.642 59.9914 129.179 59.9042 128.752 59.7344C128.325 59.5601 127.954 59.3077 127.637 58.9728C127.32 58.6378 127.077 58.2295 126.898 57.7431C126.719 57.2568 126.632 56.7016 126.632 56.0776C126.632 55.5086 126.719 54.9948 126.889 54.5267C127.059 54.0587 127.302 53.6642 127.614 53.3338C127.926 53.0034 128.302 52.7511 128.743 52.5676C129.183 52.384 129.674 52.2923 130.211 52.2923C130.564 52.2923 130.89 52.3336 131.184 52.4116C131.477 52.4896 131.757 52.6272 132.028 52.8199V50.0027H131.028V48.7822L131.023 48.7868ZM130.307 58.8443C130.702 58.8443 131.028 58.7847 131.294 58.67C131.56 58.5553 131.803 58.3809 132.023 58.1469V54.0312C131.785 53.8339 131.514 53.6871 131.207 53.5999C130.899 53.5082 130.583 53.4669 130.261 53.4669C129.94 53.4669 129.656 53.5265 129.381 53.6412C129.105 53.7559 128.867 53.9257 128.66 54.1505C128.454 54.3707 128.293 54.646 128.174 54.9672C128.055 55.2884 127.995 55.6601 127.995 56.073C127.995 56.5272 128.05 56.9264 128.165 57.2751C128.279 57.6193 128.435 57.9083 128.642 58.1469C128.844 58.3809 129.087 58.5553 129.371 58.6746C129.656 58.7938 129.963 58.8535 130.303 58.8535L130.307 58.8443ZM135.63 52.4758H138.029V58.6103H139.135V59.8308H135.644V58.6103H136.694V53.6963H135.63V52.4758ZM136.446 49.8696C136.446 49.7458 136.469 49.6311 136.52 49.5164C136.57 49.4062 136.635 49.3099 136.717 49.2273C136.8 49.1447 136.896 49.0759 137.011 49.03C137.126 48.9795 137.245 48.9566 137.373 48.9566C137.502 48.9566 137.612 48.9795 137.727 49.03C137.837 49.0805 137.933 49.1447 138.016 49.2273C138.098 49.3099 138.162 49.4062 138.213 49.5164C138.263 49.6265 138.286 49.7458 138.286 49.8696C138.286 49.9935 138.263 50.1174 138.213 50.2321C138.162 50.3468 138.098 50.4478 138.016 50.5349C137.933 50.6221 137.837 50.6909 137.727 50.7414C137.616 50.7919 137.497 50.8148 137.373 50.8148C137.249 50.8148 137.126 50.7919 137.011 50.7414C136.896 50.6909 136.8 50.6221 136.717 50.5349C136.635 50.4478 136.57 50.3468 136.52 50.2321C136.469 50.1174 136.446 49.9981 136.446 49.8696ZM140.044 48.7868H142.43V53.0906C142.742 52.8474 143.081 52.6593 143.453 52.5171C143.82 52.3748 144.201 52.306 144.595 52.306C145.077 52.306 145.522 52.3978 145.921 52.5767C146.325 52.7557 146.669 53.008 146.963 53.3384C147.252 53.6642 147.481 54.0587 147.642 54.513C147.802 54.9718 147.885 55.4765 147.885 56.0271C147.885 56.619 147.793 57.1558 147.614 57.633C147.435 58.1148 147.183 58.5277 146.866 58.8718C146.545 59.216 146.169 59.4821 145.729 59.6702C145.288 59.8583 144.806 59.9501 144.279 59.9501C143.916 59.9501 143.572 59.895 143.251 59.7895C142.93 59.684 142.659 59.5463 142.43 59.3766V59.84H141.108V50.0165H140.044V48.796V48.7868ZM144.247 53.4623C143.902 53.4623 143.567 53.5357 143.251 53.6733C142.934 53.8156 142.659 54.0083 142.43 54.2469V58.202C142.581 58.358 142.806 58.4956 143.095 58.6195C143.389 58.7388 143.756 58.7984 144.201 58.7984C144.503 58.7984 144.793 58.7434 145.072 58.6287C145.352 58.514 145.6 58.3442 145.811 58.1148C146.022 57.8854 146.197 57.6009 146.32 57.2614C146.449 56.9218 146.513 56.5227 146.513 56.0684C146.513 55.6509 146.453 55.2838 146.334 54.9626C146.215 54.6415 146.05 54.3708 145.843 54.1459C145.637 53.9211 145.398 53.7559 145.123 53.6366C144.848 53.5219 144.554 53.4623 144.242 53.4623H144.247ZM149.188 48.7868H151.574V58.6103H152.68V59.8308H149.188V58.6103H150.253V50.0073H149.188V48.7868ZM155.222 56.3254C155.222 56.5318 155.235 56.7245 155.268 56.8989C155.3 57.0732 155.341 57.2338 155.401 57.3944C155.575 57.867 155.855 58.2249 156.24 58.4635C156.626 58.7021 157.062 58.8214 157.548 58.8214C157.933 58.8214 158.305 58.7663 158.667 58.6608C159.03 58.5553 159.411 58.3855 159.805 58.1607L160.338 59.06C159.856 59.3903 159.369 59.6381 158.883 59.7987C158.397 59.9593 157.887 60.0419 157.364 60.0419C156.869 60.0419 156.405 59.9593 155.983 59.7941C155.561 59.6289 155.194 59.3812 154.891 59.0554C154.584 58.7296 154.345 58.3213 154.176 57.8349C154.001 57.3485 153.919 56.7796 153.919 56.1326C153.919 55.6096 153.992 55.1095 154.139 54.646C154.286 54.178 154.506 53.7743 154.795 53.4256C155.084 53.0769 155.447 52.8016 155.878 52.5997C156.309 52.3978 156.809 52.2923 157.383 52.2923C157.956 52.2923 158.397 52.3748 158.768 52.5446C159.14 52.7144 159.443 52.9346 159.677 53.2099C159.911 53.4852 160.09 53.8018 160.209 54.1597C160.328 54.513 160.416 54.8755 160.462 55.2471C160.484 55.4261 160.503 55.6096 160.507 55.7931C160.517 55.9766 160.517 56.1556 160.517 56.3345H155.222V56.3254ZM157.286 53.3934C156.979 53.3934 156.708 53.4393 156.479 53.5265C156.249 53.6137 156.052 53.7376 155.892 53.9027C155.731 54.0679 155.603 54.2652 155.506 54.5038C155.41 54.7424 155.336 55.0039 155.291 55.2976H159.103C159.085 55.0223 159.039 54.7699 158.97 54.5359C158.901 54.3065 158.796 54.1046 158.654 53.9349C158.511 53.7651 158.328 53.632 158.108 53.5357C157.883 53.4393 157.612 53.3934 157.282 53.3934H157.286ZM165.798 49.0713H173.506V52.1179H172.052V50.3009H168.211V53.7422H171.441V54.9626H168.211V58.6103H172.052V56.7934H173.506V59.8308H165.798V58.6103H166.821V50.2964H165.798V49.0667V49.0713ZM177.053 52.4758H178.755V53.5494H177.053V58.6103H178.204V59.8308H174.626V58.6103H175.731V53.5494H174.515V52.4758H175.731V51.3241C175.74 50.8974 175.805 50.5258 175.915 50.2092C176.03 49.8926 176.19 49.6265 176.397 49.4154C176.603 49.2043 176.855 49.0438 177.149 48.9382C177.443 48.8327 177.768 48.7822 178.126 48.7822C178.379 48.7822 178.604 48.796 178.801 48.8189C178.998 48.8419 179.177 48.874 179.333 48.9153C179.489 48.9566 179.627 48.9979 179.751 49.0483C179.87 49.0942 179.98 49.1447 180.072 49.1906L179.668 50.1358C179.517 50.0532 179.319 49.9889 179.076 49.9293C178.833 49.8742 178.576 49.8421 178.314 49.8421C177.92 49.8421 177.612 49.966 177.388 50.2092C177.163 50.4524 177.053 50.8102 177.053 51.2828V52.4758ZM182.338 52.4758H184.041V53.5494H182.338V58.6103H183.49V59.8308H179.911V58.6103H181.017V53.5494H179.801V52.4758H181.017V51.3241C181.026 50.8974 181.086 50.5258 181.201 50.2092C181.315 49.8926 181.476 49.6265 181.682 49.4154C181.889 49.2043 182.141 49.0438 182.435 48.9382C182.728 48.8327 183.054 48.7822 183.417 48.7822C183.669 48.7822 183.894 48.796 184.091 48.8189C184.288 48.8419 184.467 48.874 184.623 48.9153C184.779 48.9566 184.917 48.9979 185.041 49.0483C185.16 49.0942 185.27 49.1447 185.362 49.1906L184.958 50.1358C184.807 50.0532 184.61 49.9889 184.366 49.9293C184.123 49.8742 183.866 49.8421 183.605 49.8421C183.21 49.8421 182.903 49.966 182.678 50.2092C182.453 50.4524 182.343 50.8102 182.343 51.2828V52.4758H182.338ZM185.142 52.4758H187.542V58.6103H188.647V59.8308H185.156V58.6103H186.206V53.6963H185.142V52.4758ZM185.959 49.8696C185.959 49.7458 185.982 49.6311 186.032 49.5164C186.082 49.4062 186.147 49.3099 186.229 49.2273C186.312 49.1447 186.408 49.0759 186.523 49.03C186.638 48.9795 186.757 48.9566 186.885 48.9566C187.014 48.9566 187.124 48.9795 187.239 49.03C187.349 49.0805 187.445 49.1447 187.528 49.2273C187.61 49.3099 187.675 49.4062 187.725 49.5164C187.776 49.6265 187.798 49.7458 187.798 49.8696C187.798 49.9935 187.776 50.1174 187.725 50.2321C187.675 50.3468 187.61 50.4478 187.528 50.5349C187.445 50.6221 187.349 50.6909 187.239 50.7414C187.129 50.7919 187.009 50.8148 186.885 50.8148C186.762 50.8148 186.638 50.7919 186.523 50.7414C186.408 50.6909 186.312 50.6221 186.229 50.5349C186.147 50.4478 186.078 50.3468 186.032 50.2321C185.982 50.1174 185.959 49.9981 185.959 49.8696ZM195.172 54.435C194.975 54.0817 194.722 53.8202 194.415 53.655C194.107 53.4898 193.754 53.4072 193.355 53.4072C193.047 53.4072 192.758 53.4714 192.488 53.5999C192.217 53.7284 191.983 53.9119 191.781 54.1459C191.579 54.3845 191.423 54.669 191.304 55.0085C191.189 55.3481 191.13 55.7243 191.13 56.1418C191.13 56.5548 191.189 56.9264 191.304 57.2568C191.419 57.5871 191.579 57.8716 191.781 58.1056C191.983 58.3396 192.222 58.5186 192.488 58.647C192.754 58.7709 193.043 58.8351 193.35 58.8351C193.805 58.8351 194.199 58.725 194.534 58.5048C194.869 58.2846 195.135 57.9634 195.337 57.5367L196.429 58.0781C196.287 58.3809 196.112 58.6516 195.901 58.8948C195.695 59.138 195.456 59.3399 195.195 59.5142C194.933 59.684 194.644 59.817 194.328 59.9088C194.011 60.0006 193.681 60.0464 193.332 60.0464C192.823 60.0464 192.35 59.9501 191.914 59.7574C191.483 59.5647 191.107 59.2986 190.795 58.9498C190.478 58.6057 190.235 58.1928 190.06 57.7156C189.886 57.2384 189.799 56.7154 189.799 56.1464C189.799 55.5775 189.891 55.0544 190.074 54.5772C190.258 54.1 190.51 53.6871 190.836 53.3476C191.157 53.0034 191.533 52.7373 191.965 52.54C192.396 52.3473 192.855 52.251 193.35 52.251C193.814 52.251 194.254 52.3336 194.667 52.4941C195.08 52.6547 195.443 52.8979 195.755 53.2237H196.498V54.4442H195.163L195.172 54.435ZM197.746 52.4758H200.146V58.6103H201.251V59.8308H197.76V58.6103H198.81V53.6963H197.746V52.4758ZM198.558 49.8696C198.558 49.7458 198.581 49.6311 198.631 49.5164C198.682 49.4062 198.746 49.3099 198.829 49.2273C198.911 49.1447 199.008 49.0759 199.122 49.03C199.237 48.9795 199.356 48.9566 199.485 48.9566C199.613 48.9566 199.723 48.9795 199.838 49.03C199.948 49.0805 200.045 49.1447 200.127 49.2273C200.21 49.3099 200.274 49.4062 200.324 49.5164C200.375 49.6265 200.398 49.7458 200.398 49.8696C200.398 49.9935 200.375 50.1174 200.324 50.2321C200.274 50.3468 200.21 50.4478 200.127 50.5349C200.045 50.6221 199.948 50.6909 199.838 50.7414C199.728 50.7919 199.609 50.8148 199.485 50.8148C199.361 50.8148 199.237 50.7919 199.122 50.7414C199.008 50.6909 198.911 50.6221 198.829 50.5349C198.746 50.4478 198.682 50.3468 198.631 50.2321C198.581 50.1174 198.558 49.9981 198.558 49.8696ZM203.715 56.3254C203.715 56.5318 203.729 56.7245 203.761 56.8989C203.793 57.0732 203.834 57.2338 203.894 57.3944C204.069 57.867 204.348 58.2249 204.734 58.4635C205.119 58.7021 205.555 58.8214 206.046 58.8214C206.431 58.8214 206.803 58.7663 207.166 58.6608C207.528 58.5553 207.909 58.3855 208.303 58.1607L208.836 59.06C208.354 59.3903 207.868 59.6381 207.381 59.7987C206.895 59.9593 206.386 60.0419 205.863 60.0419C205.367 60.0419 204.904 59.9593 204.481 59.7941C204.059 59.6289 203.692 59.3812 203.389 59.0554C203.082 58.7296 202.843 58.3213 202.674 57.8349C202.499 57.3485 202.417 56.7796 202.417 56.1326C202.417 55.6096 202.49 55.1095 202.637 54.646C202.784 54.178 203.004 53.7743 203.293 53.4256C203.582 53.0769 203.945 52.8016 204.376 52.5997C204.807 52.3978 205.307 52.2923 205.881 52.2923C206.454 52.2923 206.895 52.3748 207.267 52.5446C207.638 52.7144 207.941 52.9346 208.175 53.2099C208.409 53.4852 208.588 53.8018 208.707 54.1597C208.827 54.513 208.914 54.8755 208.96 55.2471C208.983 55.4261 209.001 55.6096 209.005 55.7931C209.015 55.9766 209.015 56.1556 209.015 56.3345H203.72L203.715 56.3254ZM205.78 53.3934C205.473 53.3934 205.202 53.4393 204.972 53.5265C204.743 53.6137 204.546 53.7376 204.385 53.9027C204.225 54.0679 204.096 54.2652 204 54.5038C203.903 54.7424 203.83 55.0039 203.784 55.2976H207.597C207.579 55.0223 207.533 54.7699 207.464 54.5359C207.395 54.3065 207.289 54.1046 207.147 53.9349C207.005 53.7651 206.821 53.632 206.601 53.5357C206.381 53.4393 206.106 53.3934 205.78 53.3934ZM215.645 58.6103H216.682V55.2517C216.682 54.6873 216.539 54.2606 216.25 53.9716C215.966 53.6825 215.553 53.5357 215.021 53.5357C214.713 53.5357 214.401 53.6091 214.089 53.7559C213.777 53.9027 213.479 54.0863 213.204 54.3019V58.6103H214.241V59.8308H210.804V58.6103H211.827V53.6963H210.804V52.4758H213.149V53.343H213.162C213.318 53.2053 213.484 53.0769 213.663 52.953C213.842 52.8291 214.025 52.7236 214.218 52.6318C214.41 52.54 214.612 52.4712 214.823 52.4207C215.034 52.3703 215.255 52.3427 215.489 52.3427C215.883 52.3427 216.237 52.3978 216.553 52.5079C216.87 52.618 217.141 52.7832 217.361 53.0034C217.581 53.2283 217.755 53.5127 217.875 53.8569C217.994 54.2056 218.058 54.6139 218.058 55.0865V58.6057H219.081V59.8262H215.645V58.6057V58.6103ZM225.812 54.435C225.615 54.0817 225.363 53.8202 225.055 53.655C224.748 53.4898 224.395 53.4072 223.995 53.4072C223.688 53.4072 223.399 53.4714 223.128 53.5999C222.857 53.7284 222.623 53.9119 222.422 54.1459C222.22 54.3845 222.064 54.669 221.944 55.0085C221.83 55.3481 221.77 55.7243 221.77 56.1418C221.77 56.5594 221.83 56.9264 221.944 57.2568C222.059 57.5871 222.22 57.8716 222.422 58.1056C222.623 58.3396 222.862 58.5186 223.128 58.647C223.394 58.7709 223.683 58.8351 223.991 58.8351C224.445 58.8351 224.84 58.725 225.175 58.5048C225.51 58.2846 225.78 57.9634 225.978 57.5367L227.07 58.0781C226.927 58.3809 226.753 58.6516 226.546 58.8948C226.34 59.138 226.101 59.3399 225.84 59.5142C225.578 59.684 225.289 59.817 224.973 59.9088C224.656 60.0006 224.326 60.0464 223.977 60.0464C223.468 60.0464 222.995 59.9501 222.559 59.7574C222.128 59.5647 221.752 59.2986 221.44 58.9498C221.123 58.6057 220.88 58.1928 220.706 57.7156C220.531 57.2384 220.444 56.7154 220.444 56.1464C220.444 55.5775 220.536 55.0544 220.719 54.5772C220.903 54.1 221.155 53.6871 221.481 53.3476C221.802 53.0034 222.178 52.7373 222.61 52.54C223.041 52.3473 223.5 52.251 223.995 52.251C224.459 52.251 224.899 52.3336 225.312 52.4941C225.725 52.6547 226.088 52.8979 226.404 53.2237H227.148V54.4442H225.812V54.435ZM227.95 52.4758H230.74V53.6963H229.868L231.594 58.3901L233.397 53.6963H232.53V52.4758H235.319V53.6963H234.558L231.286 61.9506H232.296V63.1711H229.327V61.9506H230.222L231.002 59.9272L228.547 53.6963H227.95V52.4758Z" fill="#152C53"/>
+<path d="M37.5 75C16.7564 75 0 58.2436 0 37.5C0 16.7564 16.7564 0 37.5 0C58.2436 0 75 16.7564 75 37.5C75 58.2436 58.2436 75 37.5 75ZM37.5 4.78557C19.4681 4.78557 4.78557 19.4681 4.78557 37.5C4.78557 55.5319 19.4681 70.2144 37.5 70.2144C55.5319 70.2144 70.2144 55.5319 70.2144 37.5C70.2144 19.4681 55.5319 4.78557 37.5 4.78557Z" fill="#EB5C5E"/>
+<path d="M52.4896 55.3711C52.4896 55.3711 38.3072 18.7245 38.298 18.6924C38.087 18.1188 37.4813 17.7701 36.9491 18.0317C36.683 18.1647 36.4994 18.4217 36.3847 18.6924L22.1932 55.3711C21.716 56.6466 23.1521 57.6056 24.1065 56.6466L36.5453 44.5244C36.7701 44.2996 37.0592 44.194 37.3437 44.1757C37.6236 44.1894 37.9172 44.2996 38.142 44.5244L50.5809 56.6466C51.5398 57.6056 52.9714 56.6466 52.4942 55.3711H52.4896Z" fill="#EB5C5E"/>
+</g>
+<defs>
+<clipPath id="clip0_1550_1261">
+<rect width="250.02" height="75" fill="white"/>
+</clipPath>
+</defs>
+</svg></template>
+<div id="nav"><button id="prev" aria-label="Previous">‹</button><div id="dots"></div><span id="count"></span><button id="next" aria-label="Next">›</button></div>
+
+<script>
+document.querySelectorAll('.lg').forEach(e=>e.appendChild(document.getElementById('logoTpl').content.cloneNode(true)));
+// ---------- navigation ----------
+const slides=[...document.querySelectorAll('.slide')];let cur=0;
+const dots=document.getElementById('dots');
+slides.forEach((s,i)=>{const d=document.createElement('span');d.title=s.dataset.title;d.onclick=()=>go(i);dots.appendChild(d);const pg=s.querySelector('.pg');if(pg)pg.textContent=(i+1)+' / '+slides.length;});
+function go(i){cur=Math.max(0,Math.min(slides.length-1,i));slides.forEach((s,j)=>s.classList.toggle('active',j===cur));[...dots.children].forEach((d,j)=>d.classList.toggle('on',j===cur));document.getElementById('count').textContent=(cur+1)+'/'+slides.length;history.replaceState(null,'','#'+(cur+1));}
+document.getElementById('prev').onclick=()=>go(cur-1);document.getElementById('next').onclick=()=>go(cur+1);
+document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur+1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}});
+function fit(){const s=Math.min(innerWidth/1600,(innerHeight-56)/900);document.getElementById('stage').style.transform='scale('+s+')';}
+addEventListener('resize',fit);fit();
+go(parseInt(location.hash.slice(1)||'1')-1);
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
+
+// ---------- modules ----------
+const MODS={plan:[
+ ['Merchandise Financial Planning','Sets top-down sales, margin and inventory targets by season, channel and category.','Targets built in Excel, no link between plan and buying.','Head of Merchandising / Planning, CFO','"How do you set next season\'s sales and inventory budget today?"'],
+ ['OTB / WSSI','Tracks open-to-buy and weekly sales-stock-intake against plan.','Over-buying, no live view of budget left to spend.','Head of Planning, Head of Buying','"How do you know how much budget is left to buy mid-season?"'],
+ ['Assortment & Buy Planning','Decides which styles, sizes and depth to buy, driven by attributes and true rate of sale.','Buying on gut feel; dead stock and broken sizes.','Head of Buying, Head of Merchandising','"How do you decide which styles and how many to buy?"'],
+ ['Allocation & Replenishment','Sends the right stock to each store and refills automatically from sales.','Stores with too much of one item and none of another; Excel allocation.','Head of Merchandising, Head of Planning, Head of Supply Chain','"How do you decide what each store gets?"'],
+ ['Markdown Optimisation','Recommends when and how much to discount, per item and store.','Blanket end-of-season sales eating margin.','Head of Merchandising, CEO','"How do you decide when to discount slow sellers?"'],
+ ['Copilot / BI (KPI Watchtower)','AI dashboards and alerts on inventory health and sell-through.','Reports pulled manually from several systems.','CXOs, Head of Merchandising, Head of Planning','"How long does it take to see last week\'s sell-through by store?"']],
+exec:[
+ ['WMS 1.0 (piece-level)','Scan-based warehouse: every piece barcoded from gate entry to dispatch, 100% traceable.','Stock mismatches, manual pick lists, slow picking for B2C and marketplaces.','Head of Warehouse, Head of Supply Chain, COO','"Do you pick one item at a time, and how accurate is your stock count?"'],
+ ['WMS 2.0 (carton/pallet)','Warehouse for boxes and pallets: batches, FEFO/FIFO, forklift tasks, B2B dispatch.','Expiry losses, long cycle counts (Thai Bev: 15–30 days), paper-based putaway.','Head of Warehouse, Head of Logistics, Head of Supply Chain','"Do goods move as cartons and pallets? How do you handle expiry?"'],
+ ['OMS','One inventory view across warehouses, stores and marketplaces; routes each order to the best location. 40+ marketplace integrations.','Overselling on Shopee/Lazada/TikTok, stock not synced across channels.','Head of E-commerce / Omnichannel, CTO / CIO','"Do you ever sell online something that\'s actually out of stock?"'],
+ ['Store Fulfilment (SFS)','Lets stores ship online orders, BOPIS/BORIS, endless aisle; exposes store stock online.','Online stock-outs while stores sit on inventory.','Head of Omnichannel, Head of E-commerce, COO','"Can your stores fulfil online orders today?"'],
+ ['Store Management','Store inventory, picker app, receiving and replenishment at store level.','No proper store-level inventory software (Amway\'s real need).','Head of Operations / COO, Head of Supply Chain','"How do stores receive stock and report what they hold?"'],
+ ['B2B / Cross-dock','Wholesale and distributor dispatch, box-level cross-docking.','Manual B2B order entry (M-SENKO took orders by email).','Head of Logistics, Head of Distribution, Head of Supply Chain','"How do distributor orders reach the warehouse?"']]};
+document.querySelectorAll('[data-lob]').forEach(box=>{MODS[box.dataset.lob].forEach(m=>{const c=el('span','chip',m[0]);c.onclick=()=>{document.querySelectorAll('#modPanel').forEach(()=>{});document.querySelectorAll('.lob .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');document.getElementById('modPanel').innerHTML=`<div class="label" style="color:#F4A3A4">${box.dataset.lob==='plan'?'Merchandising':'Omni'}</div><h3>${m[0]}</h3><div class="k">What it does</div><p>${m[1]}</p><div class="k">Pain it solves</div><p>${m[2]}</p><div class="k">Who buys</div><p>${m[3]}</p><div class="k">Ask this</div><p style="font-style:italic">${m[4]}</p>`;};box.appendChild(c);});});
+
+// ---------- journey ----------
+const J=[['Plan','How much will we sell next season?','Merchandise Financial Planning, OTB','"Our targets live in Excel"',
+ ['How do you set next season\'s sales and stock targets: by category, channel, store?','Which tool do you plan in today: Excel, ERP, something else?','How far off was last season\'s plan from what actually sold?'],
+ 'CEO / Founder · Chief Merchandising Officer · Head of Merchandising · Head of Planning · CFO'],
+['Buy','Which styles, sizes, how deep?','Assortment & Buy Planning','"We end up with dead stock and broken sizes"',
+ ['How do you decide which styles and how many units to buy?','How much stock is left at the end of a season, and how much goes on discount?','How do you plan size ratios?'],
+ 'CEO / Founder · Head of Buying · Head of Merchandising · Head of Planning'],
+['Allocate','What does each store get?','Allocation & Replenishment, Markdown','"Some stores run out while others overflow"',
+ ['How do you decide what each store gets, and how often do you replenish?','Do some stores sell out while others sit on the same stock?','How many people work on allocation, and in what tool?'],
+ 'Head of Merchandising · Head of Planning · Head of Supply Chain · COO'],
+['Receive & store','Goods arrive at the warehouse','WMS (1.0 piece / 2.0 carton)','"Stock count never matches the system"',
+ ['How accurate is your stock count compared to the system?','How long does a full cycle count take?','Who runs the warehouse: your team or a 3PL?'],
+ 'COO / Head of Operations · Head of Supply Chain · Head of Warehouse · Head of Logistics · CIO / CTO'],
+['Sell everywhere','Stores, website, Shopee, Lazada, TikTok','OMS + marketplace integrations','"We oversell online"',
+ ['Which channels do you sell on, and from which warehouses or stores?','Do you cancel orders because stock wasn\'t synced?','How quickly does stock update across channels?'],
+ 'Head of E-commerce / Omnichannel · Head of Digital / CDO · CIO / CTO · CEO / Founder'],
+['Pick, pack, ship','Orders leave warehouse or store','WMS + SFS (ship-from-store)','"Picking is on paper printouts"',
+ ['How are pick lists created: paper or handheld scanners?','How many orders a day, and how many pickers?','How often does a wrong item get shipped?'],
+ 'COO / Head of Operations · Head of Warehouse · Head of Logistics · Head of Supply Chain'],
+['Returns','Goods come back','WMS returns + OMS','"Returns sit unprocessed for days"',
+ ['How long before a return is back in sellable stock?','How do you check a returned item matches the original order?'],
+ 'Head of Warehouse · Head of E-commerce · Head of Supply Chain · COO']];
+const jr=document.getElementById('journey');
+J.forEach((s,i)=>{const d=el('div','stage',`<div class="num">STEP ${i+1}</div><div class="nm">${s[0]}</div><div class="who">${s[1]}</div>`);d.onclick=()=>{[...jr.children].forEach(x=>x.classList.remove('on'));d.classList.add('on');document.getElementById('jPanel').innerHTML=`<div class="card"><div class="label">Increff product</div><h3 style="font-size:22px">${s[2]}</h3><div class="label" style="margin-top:14px">Pain you'll hear</div><h3 style="font-size:21px;font-weight:600;font-style:italic">${s[3]}</h3></div><div class="card"><div class="label">Questions the partner can ask to get to this pain</div><ul style="padding-left:20px">${s[4].map(q=>`<li style="font-size:17px;margin-bottom:6px">"${q}"</li>`).join('')}</ul></div><div class="card"><div class="label">Who to meet (head level and above)</div><p style="font-size:18px;font-weight:600;line-height:1.55">${s[5]}</p></div>`;};jr.appendChild(d);});
+jr.children[0].click();
+
+// ---------- industries ----------
+const IND=[['Fashion & Apparel','core','MS + WMS 1.0 + OMS','Moshi Moshi, Jaspal, Supara (GQ), Wacoal'],['Footwear & Sportswear','core','MS + WMS 1.0 + OMS','Gold City, Ari Football, Rich Sport'],['Beauty & Personal Care','core','MS + WMS (1.0 or 2.0)','Beautrium'],['Jewellery & Accessories','core','MS + WMS 1.0','Pranda'],['Eyewear','core','MS + WMS 1.0','—'],
+['Home & Furniture','core','MS + WMS','HomePro (MS), SB Furniture (WMS kitting)'],['Department / multi-brand retail','core','MS + OMS + SFS','ICC, King Power, Make My Day'],['Sporting goods & toys','core','MS + WMS 1.0','—'],['Luxury','core','MS + WMS 1.0','—'],['Books & stationery','core','WMS','SE-ED Book Center'],['Electronics & appliances','w2','WMS 2.0 (MS if planning need)','—'],
+['FMCG / Food & Beverage','w2','WMS 2.0','Thai Beverage, Boon Rawd, Ampol Foods, Namchow'],['Pharma','w2','WMS 2.0 (batch / FEFO)','—'],['Wholesale & distribution','w2','WMS 2.0, MS for allocation','GO Wholesale (3PL-run: not now)'],['Pure manufacturing','out','Not a fit unless retail/warehouse use case is validated','Asian Alliance asked for production planning'],
+['Banking / insurance','out','Out of ICP',''],['Oil & gas','out','Out of ICP',''],['Software / consulting','out','Out of ICP',''],['Pure services','out','Out of ICP',''],['Courier / outsourced warehousing need','out','We are not a courier or a 3PL','Bata wanted a full-service 3PL']];
+const ig=document.getElementById('indgrid');
+IND.forEach(x=>{const d=el('div','ind '+x[1],`<span class="t">${x[0]}</span><span class="tag ${x[1]==='core'?'g':x[1]==='w2'?'b':'r'}" style="align-self:flex-start;margin-top:6px">${x[1]==='core'?'Core':x[1]==='w2'?'WMS 2.0':'Out'}</span>`);d.onclick=()=>{[...ig.children].forEach(c=>c.classList.remove('on'));d.classList.add('on');document.getElementById('indPanel').innerHTML=`<div class="row" style="gap:40px"><div><div class="label">Product fit</div><h3 style="font-size:24px">${x[2]}</h3></div>${x[3]?`<div><div class="label">From our Thai meetings</div><h3 style="font-size:24px;font-weight:600">${x[3]}</h3></div>`:''}</div>`;};ig.appendChild(d);});
+
+// ---------- landscape ----------
+const SYS=[['ERP','SAP, Oracle, D365, Odoo, Navision','no','We don\'t sell ERP. We integrate with it. If the pain is "our ERP can\'t record lots / shelf life" or "we\'re migrating ERP", that\'s an ERP project, not an Increff meeting.','GO Wholesale (MMS limits), Ari Football (ERP migration 2027), Bangkok Sport Swear (SAP B1 after Odoo)'],
+['3PL services','Warehouse space + manpower + transport','no','We don\'t run warehouses or supply people in Thailand. A brand buying a full-service 3PL is not our buyer.','Bata Thailand, GO Wholesale'],
+['Production planning','Factory, raw materials, packaging','no','Outside scope. Our planning is merchandise planning for selling inventory, not factory planning.','Asian Alliance International'],
+['TMS / courier','Last-mile delivery, fleets','no','Not a fit on its own. We integrate with couriers for dispatch.','—'],
+['Merchandising','Plan, buy, allocate, replenish, markdown','yes','Our planning suite. Best fit: multi-store fashion and lifestyle with Excel planning.','Moshi Moshi, ICC, HomePro, Wacoal'],
+['WMS','Run the warehouse floor','yes','Piece-level (1.0) or carton/pallet (2.0). Sold to brands and retailers that run their own warehouse.','Thai Beverage, Ampol, Jaspal, Boon Rawd'],
+['OMS','One stock view, route every order','yes','Sits between channels, ERP and warehouses, even when a 3PL runs the warehouse.','Better Land, Rich Sport'],
+['Store systems (SFS)','Ship-from-store, store inventory','yes','For brands with 10+ stores selling online and offline.','Amway (store inventory need)']];
+const ld=document.getElementById('land');
+SYS.forEach(s=>{const d=el('div','sys '+s[2],`<div class="t">${s[2]==='yes'?'✓':'✕'} ${s[0]}</div><div class="s">${s[1]}</div>`);d.onclick=()=>{[...ld.children].forEach(c=>c.classList.remove('on'));d.classList.add('on');document.getElementById('sysPanel').innerHTML=`<div class="row" style="gap:36px"><div style="flex:1.4"><span class="tag ${s[2]==='yes'?'g':'r'}">${s[2]==='yes'?'Increff sells this':'Increff does not sell this'}</span><p style="margin-top:10px;font-size:19px">${s[3]}</p></div><div style="flex:1"><div class="label">Seen in</div><p style="font-size:18px">${s[4]}</p></div></div>`;};ld.appendChild(d);});
+
+// ---------- router ----------
+const RQ=[['need','What are they trying to solve?',[['plan','Planning & buying the right stock'],['ops','Warehouse / order operations'],['both','Both'],['erp','ERP or finance system problems']]],
+['chan','Where do they sell?',[['stores','Stores only'],['online','Online only'],['omni','Stores + online / marketplaces']]],
+['unit','How do goods leave the warehouse?',[['piece','One piece at a time'],['carton','Cartons / pallets'],['3pl','A 3PL runs it']]],
+['ind','Industry?',[['fashion','Fashion / footwear / lifestyle'],['fmcg','FMCG / beverage / pharma'],['other','Manufacturing / services']]]];
+const ans={};const rt=document.getElementById('router');
+RQ.forEach(q=>{const b=el('div','q',`<div class="qt">${q[1]}</div>`);const o=el('div','opts');q[2].forEach(op=>{const c=el('span','chip',op[1]);c.onclick=()=>{[...o.children].forEach(x=>x.classList.remove('on'));c.classList.add('on');ans[q[0]]=op[0];route();};o.appendChild(c);});b.appendChild(o);rt.appendChild(b);});
+const resetB=el('span','chip','Reset');resetB.style.marginTop='6px';resetB.onclick=()=>{for(const k in ans)delete ans[k];rt.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));const o=document.getElementById('routeOut');o.className='';o.innerHTML='<h3>Answer the questions</h3>';};rt.appendChild(resetB);
+const PROBE={need:['"Where does it hurt most today: buying and planning stock, or running the warehouse and orders?"','"If you could fix one thing this year, what would it be?"'],
+ chan:['"Do you sell through your own stores, online, marketplaces or wholesale?"','"How many stores do you run, and how many are your own?"'],
+ unit:['"Who runs your warehouse: your own team or a 3PL?"','"Do you pick single pieces for online orders, or move cartons and pallets?"','"Roughly how many pieces or orders leave the warehouse each month?"'],
+ ind:['"What products do you sell, and who are your customers?"']};
+function route(){const o=document.getElementById('routeOut');let t,bar,who,note='',cls='done';
+ if(ans.need==='erp'){t='Not an Increff meeting (yet)';bar='—';who='—';note='ERP/finance pain alone is outside scope. Ask what happens in the warehouse and stores; book only if there is an operations or planning pain too.';}
+ else if(ans.ind==='other'){t='Likely not a fit';bar='—';who='—';note='Manufacturing and pure services sit outside ICP unless a retail/warehouse use case is clearly validated. Check with Increff first.';}
+ else{const p=[];
+  if(ans.need==='plan'||ans.need==='both')p.push('Merchandising (MS)');
+  if(ans.need==='ops'||ans.need==='both'){
+   if(ans.unit==='3pl'){note='Warehouse is with a 3PL: don\'t book WMS for the brand. Check for OMS (multi-channel stock) or planning (allocation) pain instead.';if(ans.chan==='omni')p.push('OMS');}
+   else if(ans.unit==='carton'||ans.ind==='fmcg')p.push('WMS 2.0');else if(ans.unit)p.push('WMS 1.0');
+   if(ans.chan==='omni'&&ans.unit!=='3pl')p.push('OMS / SFS');}
+  if(!p.length){t='Keep asking';cls='';bar='';who='';}
+  else{t=p.join(' + ');const bars=[];if(p.some(x=>x.startsWith('Merch')))bars.push('MS: ~$10M+ revenue, multi-store (minimum 20 stores)');if(p.includes('WMS 1.0'))bars.push('WMS 1.0: ≥30k pieces/month');if(p.includes('WMS 2.0'))bars.push('WMS 2.0: carton/pallet volumes, ~$5M+');if(p.some(x=>x.startsWith('OMS')))bars.push('OMS/SFS: 10+ stores');bar=bars.join('<br>');
+   const w=new Set(['CEO / Founder']);if(p.some(x=>x.startsWith('Merch')))['Chief Merchandising Officer','Head of Merchandising','Head of Planning','Head of Buying','CFO'].forEach(x=>w.add(x));if(p.some(x=>x.startsWith('WMS')))['COO / Head of Operations','Head of Supply Chain','Head of Warehouse','Head of Logistics'].forEach(x=>w.add(x));if(p.some(x=>x.startsWith('OMS')))['Head of E-commerce / Omnichannel','Head of Digital / CDO'].forEach(x=>w.add(x));w.add('CIO / CTO (for integration)');who=[...w].join(' · ');}}
+ o.className=cls;o.innerHTML=`<div class="label" style="color:${cls?'#F4A3A4':'var(--coral)'}">Route to</div><h3>${t}</h3>${bar?`<div class="label" style="margin-top:18px;color:${cls?'#F4A3A4':'var(--coral)'}">Scale bar</div><p>${bar}</p>`:''}${who?`<div class="label" style="margin-top:18px;color:${cls?'#F4A3A4':'var(--coral)'}">Who must be on the call</div><p>${who}</p>`:''}${note?`<p style="margin-top:18px;padding:12px 14px;border-radius:10px;background:rgba(235,92,94,.18)">${note}</p>`:''}${(()=>{const miss=RQ.filter(q=>!ans[q[0]]);if(!miss.length)return '';return `<div class="label" style="margin-top:18px;color:${cls?'#F4A3A4':'var(--coral)'}">Still to find out: ask</div><ul style="padding-left:20px">${miss.map(q=>PROBE[q[0]].map(x=>`<li style="font-size:16px;margin-bottom:4px">${x}</li>`).join('')).join('')}</ul>`;})()}`;}
+
+// ---------- accounts ----------
+const ACC=[
+['Moshi Moshi','MS','prog','Proposal','200+ stores, 100k+ SKUs, Excel planning; Head of Supply Chain on the first call'],
+['ICC International','MS','prog','Proposal','Onsite demo in Bangkok; POC waits on the right business stakeholders and brands'],
+['Jaspal Group','WMS','prog','Proposal','Discovery led to a warehouse visit; no budget yet, board approval, 1–2 yr horizon'],
+['Thai Beverage','WMS 2.0','prog','Warehouse visit','Demo led to an onsite workshop; cycle counts take 15–30 days today'],
+['Ampol Foods','WMS 2.0','prog','Demo','Onsite demo during the Bangkok trip'],
+['HomePro','MS','prog','POC discussion','~130 stores; wants hands-on access with sample data; frustrated by repeated demos'],
+['Namchow','WMS 2.0','prog','First meet','New warehouse needing automation; shares real requirements only in person'],
+['SE-ED Book Center','WMS','prog','First meet','100k SKUs, one large warehouse; volume data still needed'],
+['Boon Rawd Brewery','WMS 2.0','prog','First meet','SAP EWM in place; Head of WMS absent; budget not approved, target Q2 2027'],
+['King Power','MS + Omni','nur','Discovery','Budget set at year-end 2026, implementation 2027 if approved'],
+['Ari Football','WMS / OMS','nur','Timeline','ERP migration first (2027); first attendee was an ERP stand-in; no WMS budget'],
+['Bangkok Sport Swear','MS','nur','Timeline','Mid-ERP change after a failed Odoo rollout; 1–2 yrs out; ~THB 200M revenue'],
+['Asian Alliance','WMS','nur','Need','Asked for production/packaging planning (out of scope); revisit for 3rd factory'],
+['Better Land DC','OMS','dor','Dormant','150k orders/day on OASIS OMS; strong demo, no next step stuck'],
+['Rich Sport','WMS / OMS','dor','Dormant','Booked as a "merchandising overview"; real pain was marketplace–WMS sync; later missed demos'],
+['Gold City Footwear','WMS','dor','Dormant','Nov-25: "we already have a complete solution" (Manhattan + SAP); restarted Jun-26 with Head of Warehouse'],
+['Wacoal Thailand','MS','dor','Dormant','400–500 stores; January 2026 decision target passed'],
+['Pasaya','WMS / OMS','dor','Dormant','Spends ~THB 150k a year on systems, far below an Increff budget'],
+['AIIZ (Reno)','MS','dor','Dormant','Demo rescheduled three times; decision-maker unavailable'],
+['April Pool Day','MS','dor','Dormant','~50k pieces a year, 300 styles: below the scale bar'],
+['Amway Thailand','SFS','dor','Dormant','Just went live on Manhattan WMS; SFS demo missed the real need (store inventory)'],
+['Make My Day','MS','dor','Dormant','First meeting no-show; demo done, then went quiet'],
+['SSUP (Bisous Bisous)','MS','dor','Dormant','~50 SKUs; real pain was dealer-store visibility'],
+['Bangkok Beer & Beverage','WMS','dor','Dormant','Odoo + Google Sheets; small operation'],
+['Kito','WMS','dor','Dropped','Intro and onsite deep dive, then dropped'],
+['SB Furniture','WMS / OMS','dor','Dormant','Needed board and IT before any next step'],
+['Supara (GQ)','WMS','dor','Closed lost','Multi-vendor evaluation; keeping its current OMS'],
+['GO Wholesale','WMS','fit','Not pursued','3PL runs the warehouse; the gap was in their own MMS/ERP'],
+['Bata Thailand','WMS / OMS','fit','Not a fit','Buying a full-service 3PL (warehouse + manpower + systems)'],
+['M-SENKO Logistics','WMS 2.0','fit','No progress','Only the engineering team attended; decision-maker absent'],
+['Pranda','WMS','fit','Call failed','Mic failure; decision-maker dropped off'],
+['Rev Edition','WMS / OMS','fit','No-show','Customer did not join'],
+['Beautrium','MS','fit','Cut short','30-minute window; logistics only']];
+const OC={prog:['Progressing','#1F8A5B','g'],nur:['Nurture (12+ months / need)','#C98A00','y'],dor:['Dormant / lost','#7C8698','n'],fit:['Not a fit / didn\'t happen','#C8393B','r']};
+let filt='all';
+function drawAcc(){const t=document.getElementById('acctTable');t.innerHTML='<tr><th>Account</th><th>Product</th><th>Outcome</th><th>Why</th></tr>'+ACC.filter(a=>filt==='all'||a[2]===filt).map(a=>`<tr><td><b>${a[0]}</b></td><td>${a[1]}</td><td><span class="tag ${OC[a[2]][2]}">${a[3]}</span></td><td>${a[4]}</td></tr>`).join('');}
+const af=document.getElementById('acctFilters');
+[['all','All 33']].concat(Object.keys(OC).map(k=>[k,OC[k][0]+' ('+ACC.filter(a=>a[2]===k).length+')'])).forEach(f=>{const c=el('span','chip'+(f[0]==='all'?' on':''),f[1]);c.dataset.f=f[0];c.onclick=()=>{filt=f[0];[...af.children].forEach(x=>x.classList.toggle('on',x===c));drawAcc();};af.appendChild(c);});
+drawAcc();
+const ob=document.getElementById('outBar'),ol=document.getElementById('outLegend');
+Object.keys(OC).forEach(k=>{const n=ACC.filter(a=>a[2]===k).length;const d=el('div','',n);d.style.flex=n;d.style.background=OC[k][1];d.onclick=()=>{filt=k;[...af.children].forEach(x=>x.classList.toggle('on',x.dataset.f===k));drawAcc();go(10);};ob.appendChild(d);ol.appendChild(el('span','',`<b style="color:${OC[k][1]==='#7C8698'?'#B7C0CF':OC[k][1]}">■</b> ${OC[k][0]}`));});
+
+// ---------- patterns ----------
+const W=[['A named, multi-store retailer planning in Excel','<b>Moshi Moshi</b> (200+ stores, Excel) and <b>ICC</b> both reached proposal. <b>HomePro</b> (130 stores) is in POC talks. Store count and Excel planning were the clearest MS signals.'],
+['The head of the function on the first call','<b>Moshi Moshi</b>: Head of Supply Chain. <b>Gold City</b> (Jun-26): Head of Warehouse gave volumes and pain in one call. Meetings with stand-ins stalled.'],
+['A concrete, countable warehouse pain','<b>Thai Beverage</b>: 15–30-day cycle counts. <b>SB Furniture</b>: one SKU in 2–3 packages. <b>Gold City</b>: paper pick lists. Numbers gave Increff something to demo against.'],
+['Food & beverage distributors running their own warehouses','<b>Thai Beverage, Ampol Foods, Boon Rawd, Namchow</b>: four of the nine progressing accounts. WMS 2.0 (batches, FEFO, forklifts) fits them well.'],
+['Moving to in-person in Bangkok','Onsite visits pushed <b>ICC, Jaspal, Thai Beverage, Ampol</b> to the next stage. <b>Namchow</b> said it would share real requirements only face to face.']];
+const D=[['The pain was outside Increff','ERP problems (<b>GO Wholesale, Ari Football, Bangkok Sport Swear</b>), production planning (<b>Asian Alliance</b>), a full-service 3PL (<b>Bata</b>).<br><b>Fix:</b> ask "is this ERP, warehouse, stores or planning?" before booking.'],
+['Warehouse run by a 3PL','<b>GO Wholesale</b> and <b>Bata Thailand</b>. The brand wasn\'t the WMS buyer.<br><b>Fix:</b> ask who runs the warehouse; if a 3PL, look for OMS/planning pain or target the 3PL.'],
+['Systems just replaced','<b>Amway</b> (Manhattan WMS live Q4-25), <b>Gold City</b> Nov-25 ("complete solution"), <b>Supara</b> (keeping OMS).<br><b>Fix:</b> ask when they last changed WMS/OMS; under 12 months = nurture.'],
+['Below the scale bar','<b>April Pool Day</b> (~50k pieces/yr), <b>SSUP</b> (~50 SKUs), <b>Pasaya</b> (~THB 150k/yr on systems), <b>BBB</b> (Sheets).<br><b>Fix:</b> get stores, pieces/month and current system spend before booking.'],
+['Wrong person or nobody','Stand-ins and engineers (<b>Ari Football, M-SENKO, Boon Rawd</b>), no-shows (<b>Make My Day, Rev Edition</b>), 3 reschedules (<b>AIIZ</b>), call failure (<b>Pranda</b>).<br><b>Fix:</b> confirm the decision-maker 24h before; reschedule rather than run without them.'],
+['Product mis-routed before the call','<b>Rich Sport</b> booked as merchandising, needed WMS/OMS sync. <b>Amway</b> got an SFS demo but needed store inventory. <b>Gold City</b> (Nov-25) got a merchandising pitch with no own stores.<br><b>Fix:</b> run the four routing questions and title the meeting after the real pain.']];
+function pats(id,arr){const g=document.getElementById(id);arr.forEach((p,i)=>{const d=el('div','pat',`<div class="n">${String(i+1).padStart(2,'0')}</div><div class="t">${p[0]}</div><div class="d">${p[1]}</div>`);d.onclick=()=>d.classList.toggle('open');g.appendChild(d);});}
+pats('worked',W);pats('didnt',D);
+
+// ---------- cases ----------
+const CASES=[['GO Wholesale',['14-store wholesale/retail chain wants to discuss WMS. Contact runs the DC and transport. Interested in lot numbers, shelf life and catch weight for fresh food.'],['The warehouse is run by a <b>3PL whose WMS already does lots and shelf life</b>. The gap is their in-house <b>MMS (ERP)</b>, which can\'t record those fields. Contact: "it\'s not an issue of the WMS, it\'s an issue from my side." Own warehouse only at 20–25 stores (~2 years).'],['"Who runs the warehouse today?"','"Is the gap in your ERP or in warehouse operations?"','"How do you allocate to stores today?" (Excel allocation = possible MS lead)','Outcome: nurture with a trigger, not a WMS meeting']],
+['Bata Thailand',['Big footwear brand, 300–400k SKUs, wants a WMS & OMS discussion. Bata India is a long-time Increff client, so it felt like an easy fit.'],['Bata Thailand is <b>buying a full-service 3PL</b>: warehouse, manpower, WMS, OMS in one contract. Three 3PLs had already bid; decision end-Nov, through Bata Global. Increff sells software only, so we can\'t bid.'],['"Are you choosing software, or an outsourced warehouse service?"','"Who has already bid, and when is the decision?"','"Beyond the warehouse, how do you plan and allocate stock to stores?" (possible MS need)','Outcome: not a fit for this RFP']],
+['Amway Thailand',['82 retail shops with daily inventory mismatches between ERP and stores. Booked an SFS (ship-from-store) demo.'],['Amway had <b>just gone live on Manhattan WMS and a new commerce platform</b> (Q4-25), so no replacement. Online orders were handled. The real need was <b>store inventory management</b> (warehouse-to-store replenishment, FEFO, backroom vs floor).'],['"What did you change in the last 12 months?"','"Is the problem online orders or stock inside the stores?"','Route to store management, not SFS','Outcome: right account, wrong product demo']],
+['Ari Football',['Football brand, 20 stores, 60–70k orders/month, 80% from marketplaces. Booked a WMS discussion.'],['First attendee <b>manages the ERP and was standing in</b> for a colleague. Priority is an <b>ERP migration (Odoo) from 2027</b>; WMS in Q3 2027; no WMS budget yet. The fit is real, the timing isn\'t.'],['"Who owns warehouse operations, and can they join?"','"What projects are running in the next 12 months?"','"Is there budget for WMS this year?"','Outcome: nurture to the ERP go-live']],
+['Moshi Moshi (worked)',['Lifestyle retailer, 200+ stores, 100k+ SKUs, 80% fashion-like products changing every 4–6 months.'],['<b>Head of Supply Chain</b> attended. Planning ran in <b>Excel</b>. Clear MS fit, scale well above the bar. Board follow-up and an in-person meeting led to proposal and paid-POC talks.'],['Named the planning pain upfront','Right buyer on call one','Scale confirmed before the demo','Outcome: proposal stage']]];
+const ct=document.getElementById('caseTabs');
+function showCase(i){[...ct.children].forEach((c,j)=>c.classList.toggle('on',j===i));const c=CASES[i];const b=document.getElementById('caseBox');b.innerHTML='';
+ const s1=el('div','step s1',`<div class="k">1 · What we heard</div><p>${c[1][0]}</p>`);
+ const s2=el('div','step s2',`<div class="k">2 · What was really going on</div><p>${c[2]}</p>`);
+ const s3=el('div','step s3',`<div class="k">3 · What to ask next time</div><ul>${c[3].map(x=>`<li style="margin-bottom:8px">${x}</li>`).join('')}</ul>`);
+ [s2,s3].forEach(s=>{const cv=el('div','cover2','Discuss first, then click to reveal');cv.onclick=()=>cv.remove();s.appendChild(cv);});
+ b.append(s1,s2,s3);}
+CASES.forEach((c,i)=>{const t=el('span','chip',c[0]);t.onclick=()=>showCase(i);ct.appendChild(t);});showCase(0);
+
+// ---------- BANT ----------
+const B=[['Budget',['Already paying for something similar, budget confirmed, or open to an enterprise-level commitment','No budget yet but open to it / needs approval / hesitant on commitment','No budget, no appetite, or never discussed']],
+['Authority',['Speaking to the decision-maker, or it\'s a formal RFP','Influencer only, or multi-layer approval with a known owner','No one owns this internally, or never discussed']],
+['Need',['Clear, specific, quantified problem matching Ops or Merchandising','General interest, pain not quantified, or partial overlap','No real problem, curiosity only, or outside scope (ERP, TMS-only, PLM)']],
+['Timeline',['Clear trigger, wants to move in 0–9 months','Interested but 9–18 months out, or a vague-but-real trigger','No timeline, or "someday, not now"']]];
+const sel={};const bg=document.getElementById('bgrid');
+bg.append(el('div','h',''),el('div','h','<span class="tag g">Green</span>'),el('div','h','<span class="tag y">Yellow</span>'),el('div','h','<span class="tag r">Red</span>'));
+B.forEach(r=>{bg.append(el('div','crit',r[0]));['G','Y','R'].forEach((k,i)=>{const c=el('div','cell '+k,r[1][i]);c.onclick=()=>{sel[r[0]]=k;bg.querySelectorAll(`[data-r="${r[0]}"]`).forEach(x=>x.classList.toggle('sel',x===c));bant();};c.dataset.r=r[0];bg.append(c);});});
+function bant(){const o=document.getElementById('bantOut');const v=Object.values(sel);const n=v.length;
+ let st,txt,bgc,col='#fff';
+ if(v.includes('R')){st='Hold: do not hand off';txt='Flag the red back and keep scoping before any handoff.';bgc='var(--red)';}
+ else if(n<4){st='Grade all four letters';txt=`${n} of 4 graded. Click a cell in each row.`;bgc='var(--panel)';col='var(--navy)';}
+ else if(v.includes('Y')){st='Discuss with Increff before booking';txt='Accepted but flagged with the gap. We agree next steps together before the call.';bgc='var(--yellow)';}
+ else{st='Ready for a call with the Sales Director';txt='All green, ICP fit and next call agreed: hand straight to the Sales Director as a qualified opportunity.';bgc='var(--green)';}
+ o.style.background=bgc;o.style.color=col;o.innerHTML=`<div class="st">${st}</div><div style="font-size:18px">${txt}</div>`;}
+bant();
+const ex=el('div','',`<span style="font-size:15px;color:var(--muted);margin-right:10px">Try a real case from your meetings:</span>`);ex.style.marginTop='12px';
+const BEX=[['GO Wholesale',{Budget:'R',Authority:'Y',Need:'R',Timeline:'R'},'Need red: the gap was in their own ERP and a 3PL runs the warehouse. Own warehouse only in ~2 years; budget never discussed.'],
+['Bata Thailand',{Budget:'Y',Authority:'Y',Need:'R',Timeline:'G'},'Need red: buying a full-service 3PL (warehouse + manpower), which we don\'t sell. Decision via Bata Global and IT.'],
+['Amway Thailand',{Budget:'R',Authority:'Y',Need:'Y',Timeline:'R'},'Just went live on new systems, so no replacement budget or timeline. Real need (store inventory) differed from the demo booked.'],
+['Asian Alliance',{Budget:'R',Authority:'Y',Need:'R',Timeline:'Y'},'Need red: asked for production / packaging planning, outside scope. WMS talk only when planning a third factory.'],
+['Jaspal',{Budget:'Y',Authority:'Y',Need:'G',Timeline:'Y'},'Clear warehouse pain, but no budget yet, board / CEO approval needed, and a 1–2 year horizon.'],
+['Ari Football',{Budget:'Y',Authority:'Y',Need:'G',Timeline:'Y'},'Real order volume and pick/pack pain, but WMS budget only in 2027, after the ERP migration; first attendee was a stand-in.'],
+['Boon Rawd',{Budget:'Y',Authority:'Y',Need:'Y',Timeline:'G'},'Target Q2 2027, but budget not approved, Head of WMS absent, and asks (AI forklift / space analytics) only partly match.'],
+['Bangkok Sport Swear',{Budget:'Y',Authority:'G',Need:'G',Timeline:'Y'},'CEO on the call with a clear allocation pain, but mid-ERP change and 1–2 years out; scale is borderline.'],
+['King Power',{Budget:'Y',Authority:'Y',Need:'G',Timeline:'Y'},'Excel-based planning with a supply-chain review underway; budget set at year-end, implementation 2027 if approved.'],
+['Moshi Moshi',{Budget:'Y',Authority:'G',Need:'G',Timeline:'G'},'Head of Supply Chain, 200+ stores on Excel, merchandising work starting. Budget is the gap, being closed through a paid POC.'],
+['Clear',{},'']];
+const why=el('p','','');why.style.cssText='font-size:16px;color:var(--muted);margin-top:8px;min-height:24px';
+BEX.forEach(p=>{const c=el('span','chip',p[0]);c.style.cssText='margin:0 8px 8px 0;font-size:15px;padding:7px 13px';c.onclick=()=>{for(const k in sel)delete sel[k];Object.assign(sel,p[1]);bg.querySelectorAll('.cell').forEach(x=>x.classList.toggle('sel',sel[x.dataset.r]===[...x.classList].find(k=>['G','Y','R'].includes(k))));bant();why.innerHTML=p[2]?`<b style="color:var(--navy)">${p[0]}:</b> ${p[2]}`:'';[...ex.querySelectorAll('.chip')].forEach(z=>z.classList.toggle('on',z===c&&p[0]!=='Clear'));};ex.appendChild(c);});
+ex.appendChild(why);
+document.getElementById('bantOut').after(ex);
+
+// ---------- checklist ----------
+const CL=[['POC details','Company, website, industry, name, title, email, LinkedIn, phone, country',1],['Company fit','What they do, contact\'s role, planning vs warehouse/orders, stores/online/both',1],['Business scale','Revenue, stores & warehouses, monthly orders, piece vs carton, geography',1],['Budget','Money set aside? Paying for a tool now? Replacing something?',1],['Decision ownership','Who decides / owns budget; who else is in the buying journey',1],['Pain point','A real pain with a specific example of the struggle',1],['Timeline','0–6, 6–12 months or later',1],['Evaluation type','Formal RFP or casual exploring',0],['Buying trigger','New warehouse, contract ending, launch, peak season',0],['Red flags','Price pushback, unsure tone, competitor named',0]];
+const clb=document.getElementById('cl');const ck=new Set();
+CL.forEach((c,i)=>{const d=el('div','ci',`<div class="box">✓</div><div><div class="t">${c[0]} <span class="tag ${c[2]?'r':'n'}" style="margin-left:6px">${c[2]?'Mandatory':'Good to know'}</span></div><div class="s">${c[1]}</div></div>`);d.onclick=()=>{ck.has(i)?ck.delete(i):ck.add(i);d.classList.toggle('on');meter();};clb.appendChild(d);});
+function meter(){const m=CL.filter((c,i)=>c[2]&&ck.has(i)).length;const tot=CL.filter(c=>c[2]).length;document.getElementById('meterFill').style.width=(m/tot*100)+'%';document.getElementById('meterFill').style.background=m===tot?'var(--green)':'var(--coral)';document.getElementById('meterTxt').innerHTML=m===tot?'<span style="color:var(--green)">Ready to grade BANT and hand off</span>':`${m} of ${tot} mandatory items known`;}
+meter();
+
+// ---------- conversation stages ----------
+const STG=[['Discovery','Stage 1 · First meet',
+ 'First conversation(s) to understand the business and agree whether there is a problem worth solving. Not a product pitch.',
+ 'Handoff form complete, BANT graded, ICP passed; a decision-influencing person attends.',
+ ['Pain confirmed in writing (recap within 24h)','Basic data shared: volumes, stores, current systems','Demo dated, with named attendees'],
+ 'Pre-qualify, brief Increff on the account, make sure the function head attends, probe in Thai rather than only translate.',
+ 'Showing videos or a demo before the pain is understood.'],
+['Demo','Stage 2 · Demo',
+ 'A tailored demonstration against the prospect\'s confirmed use cases, not a generic tour.',
+ 'Discovery recap acknowledged; agenda + success criteria confirmed by email 24h before; evaluator and someone close to the decision-maker attending.',
+ ['Prospect ranks decision criteria','Decision-maker named','Next evaluation step dated: workshop / warehouse visit, NDA, proposal'],
+ 'Confirm the agenda and attendees 24h before; reschedule if the decision-maker drops; capture questions for follow-up.',
+ 'Running the demo with stand-ins; a second "intro" demo because discovery was skipped.'],
+['NDA','Before any data moves',
+ 'Mutual NDA so the prospect can share real data (sales, stock, SKU master, volumes) and Increff can show it back.',
+ 'Prospect wants to see the product on their data, or a POC is being scoped.',
+ ['NDA signed (their paper or ours via Increff Legal)','Data owner on the prospect side named','Data template shared'],
+ 'Chase the NDA and the data owner; flag early if the prospect uses its own NDA format (HomePro does).',
+ 'Treating a signed NDA as buying intent. It only unlocks data.'],
+['Workshop','Stage 2.1 · Warehouse visit / solutioning',
+ 'Onsite or deep-dive session: walk their warehouse or planning flows, solution their process, or visit a live Increff site. Uses sample or their data under NDA.',
+ 'Demo done; technical fit agreed; Ops / Merchandising head engaged; agenda agreed in writing.',
+ ['Decision-maker or senior evaluator attends','Prospect confirms fit in writing','Pricing inputs shared (volumes, ASP, channels) → proposal review dated'],
+ 'Line up the right people and the site; agree in writing what they want to see.',
+ 'Calling it a "POC". A workshop has no LOI, no success criteria and no fee.'],
+['POC','Stage 4.1 · Proof of concept',
+ 'Time-boxed proof on the prospect\'s own data, with written success metrics, under a signed LOI. MS by default; Omni only by exception.',
+ 'Signed LOI · named Economic Buyer sponsor · 3–5 written success criteria · data under NDA with a data owner · fixed end date (≤ 90 days) · commercial path agreed.',
+ ['Success criteria met and signed off','EB readout held','Contract path agreed'],
+ 'Help secure the LOI and the EB sponsor; keep the data flowing on schedule.',
+ 'Free, open-ended POCs. Paid is the default; a free POC needs Business Head / CRO approval.']];
+const sg=document.getElementById('stg');
+STG.forEach((s,i)=>{const d=el('div','stage',`<div class="num">${String(i+1).padStart(2,'0')}</div><div class="nm" style="font-size:24px">${s[0]}</div><div class="who">${s[1]}</div>`);d.onclick=()=>{[...sg.children].forEach(x=>x.classList.remove('on'));d.classList.add('on');document.getElementById('stgPanel').innerHTML=`<div class="card"><div class="label">What it is (Increff definition)</div><p style="font-size:19px">${s[2]}</p><div class="label" style="margin-top:16px">Entry: must be true first</div><p style="font-size:17px">${s[3]}</p></div><div class="card"><div class="label">Exit: move on only when</div><ul style="padding-left:20px">${s[4].map(x=>`<li style="font-size:17px;margin-bottom:6px">${x}</li>`).join('')}</ul></div><div class="col"><div class="card" style="background:var(--navy);color:#fff;border:none"><div class="label" style="color:#F4A3A4">Aqua Orange's role</div><p style="font-size:17px;color:#E6ECF7">${s[5]}</p></div><div class="card" style="background:#FDF3F3;border-color:#F0B4B5"><div class="label">Not this</div><p style="font-size:17px">${s[6]}</p></div></div>`;};sg.appendChild(d);});
+sg.children[0].click();
+
+// ---------- 90-day plan ----------
+const TL=[['Weeks 1–2','Define the target list','Pick 2–3 segments from the "Target" list that exist in the region. Build 50–80 named accounts; run the 2-minute pre-check (physical goods, operator, scale, no blocker). Share with Increff to check DNC and existing CRM ownership.'],
+['Weeks 3–6','Reach the right person','Go to function heads (Merchandising, Supply Chain, Warehouse, E-commerce). Use the routing questions in the first conversation. Fill the handoff form as you go.'],
+['Weeks 6–10','Book only graded meetings','Hand off with BANT graded. All green → Sales Director call. Yellow → agree the plan with Increff. Red → keep scoping. Confirm attendees 24h before.'],
+['Weeks 10–13','Review and adjust','Joint review: which segments converted to second calls, no-show rate, common reds. Drop segments that don\'t convert; double down on the ones that do. Plan an in-person visit around the strongest accounts.']];
+const tl=document.getElementById('tl');TL.forEach((t,i)=>{const d=el('div','tl'+(i===0?' open':''),`<div class="w">${t[0]}</div><div class="t">${t[1]}</div><div class="d">${t[2]}</div>`);d.onclick=()=>{[...tl.children].forEach(x=>x.classList.remove('open'));d.classList.add('open');};tl.appendChild(d);});
+</script>
+</body>
+</html>
